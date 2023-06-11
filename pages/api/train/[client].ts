@@ -10,27 +10,27 @@ import path from 'path';
 import fs from 'fs';
 
 const FILENAMES = [
-    // path.resolve('public', 'store', 'Votly-guid.pdf'),
-    // path.resolve('public', 'store', 'Evidence of Traction in Sales for VOTLY.pdf'),
+    path.resolve('public', 'store', 'tafseer.docx'),
+    // path.resolve('public', 'store', 'tafseer.doc'),
     // path.resolve('public', 'store', 'ads-in-votly.pdf'),
     // 'https://votly.app',
-    'https://wevo.ae',  
-    'https://wevo.ae/en/index.html',
-    'https://wevo.ae/contact.html', 
-    'https://wevo.ae/index.html', 
-    'https://wevo.ae/download.html', 
-    'https://wevo.ae/market.html', 
-    'https://wevo.ae/sales.php', 
-    'https://wevo.ae/root.html', 
-    'https://wevo.ae/offers.html', 
-    'https://wevo.ae/names.html', 
-    'https://wevo.ae/rooms.html', 
-    'https://wevo.ae/ar/index.html', 
-    'https://wevo.ae/nicknames.html', 
-    'https://wevo.ae/features.html', 
-    'https://wevo.ae/ar/nicknames.html', 
-    'https://wevo.ae/ar/contact.html', 
-    'https://wevo.ae/ar/features.html'
+    // 'https://wevo.ae',  
+    // 'https://wevo.ae/en/index.html',
+    // 'https://wevo.ae/contact.html', 
+    // 'https://wevo.ae/index.html', 
+    // 'https://wevo.ae/download.html', 
+    // 'https://wevo.ae/market.html', 
+    // 'https://wevo.ae/sales.php', 
+    // 'https://wevo.ae/root.html', 
+    // 'https://wevo.ae/offers.html', 
+    // 'https://wevo.ae/names.html', 
+    // 'https://wevo.ae/rooms.html', 
+    // 'https://wevo.ae/ar/index.html', 
+    // 'https://wevo.ae/nicknames.html', 
+    // 'https://wevo.ae/features.html', 
+    // 'https://wevo.ae/ar/nicknames.html', 
+    // 'https://wevo.ae/ar/contact.html', 
+    // 'https://wevo.ae/ar/features.html'
 ];
 
 async function runIngest(clientFolder: string) {

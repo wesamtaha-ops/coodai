@@ -4,6 +4,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
+  padding-bottom: 0;
+  background: #f9f9f9;
+  overflow: hidden;
+
 }
 
 .header {
@@ -12,31 +16,6 @@
 
 .header p {
   text-align: center;
-}
-
-.topnav {
-  background-color: #141619;
-  border-bottom: 1px solid #30373d;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 0.75rem 1rem 0.75rem;
-  align-items: center;
-}
-
-.navlogo, .navlinks a {
-  font-weight: 500;
-}
-
-.navlogo {
-  font-size: 1.25rem;
-  margin-left: 1rem;
-}
-
-.navlinks {
-  width: 20rem;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
 }
 
 .apptitle {
@@ -57,19 +36,23 @@
 
 .cloudform {
   position: relative;
+  width: 100%;
+
 }
 
 .textarea {
   position: relative;
   resize: none;
-  font-size: 1.1rem;
-  padding: 1rem 2rem 1rem 2rem;
-  width: 75vw;
-  border-radius: 0.5rem;
+  font-size: 16px;
+  padding: 20px 20px;
+  width: 100%;
+  border-radius: 20px;
   border: 1px solid #30373d;
-  background: #070809;
-  color: #ECECF1;
+  background: #F1F1F1;
+  color: #000000;
   outline: none;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+  margin: 10px 0;
 }
 
 .textarea:disabled {
@@ -82,13 +65,35 @@
 
 .generatebutton {
   position: absolute;
-  top: 0.87rem;
-  right: 1rem;
-  color: rgb(165, 162, 162);
-  background: none;
-  padding: 0.3rem;
+  top: 22px;
+  right: 12px;
+  color: #FFFFFF;
+  background: #0084FF;
+  padding: 0.8rem;
   border: none;
   display: flex;
+  border-radius: 12px;
+  height: 40px;
+  width: 40px;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.generatebutton:hover {
+  background: #0077D7;
+}
+
+.generatebutton:disabled {
+  background: #B2B3B5;
+  cursor: not-allowed;
+}
+
+.svgicon {
+  fill: #FFFFFF;
+  width: 20px;
+  height: 20px;
 }
 
 .loadingwheel {
@@ -97,23 +102,7 @@
   right: 0.25rem;
 }
 
-.svgicon {
-  transform: rotate(90deg);
-  width: 1.2em;
-  height: 1.2em;
-  fill: currentColor;
-}
 
-.generatebutton:hover {
-  background: #1f2227;
-  border-radius: 0.2rem;
-}
-
-.generatebutton:disabled {
-  opacity: 0.9;
-  cursor: not-allowed;
-  background: none;
-}
 
 .messagelist {
   width: 100%;
@@ -129,42 +118,25 @@
   margin-top: 1rem;
 }
 
-.usermessage {
-  background: #070809;
-  padding: 1.5rem;
-  color: #ECECF1;
-}
-
-.usermessagewaiting{
-  padding: 1.5rem;
-  color: #ECECF1;
-  background: linear-gradient(to left, #070809, #1a1c20, #070809);
-  background-size: 200% 200%;
-  background-position: -100% 0;
-  animation: loading-gradient 2s ease-in-out infinite;
-  animation-direction: alternate;
-  animation-name: loading-gradient;
-}
 
 @keyframes loading-gradient {
   0% {
     background-position: -100% 0;
   }
+
   100% {
     background-position: 100% 0;
   }
 }
 
-.apimessage {
-  background: #141619;
-  padding: 1.5rem;
-  color: #ECECF1;
-  animation: fadein 0.5s;
-}
-
 @keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .apimessage, .usermessage, .usermessagewaiting {
@@ -197,6 +169,7 @@
 .boticon, .usericon {
   margin-right: 1rem;
   border-radius: 0.1rem;
+  border-radius: 100px;
 }
 
 .markdownanswer h1, .markdownanswer h2, .markdownanswer h3 {
@@ -209,19 +182,20 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 2rem 0;
   flex-direction: column;
 }
 
 .cloud {
-  width: 75vw;
-  height: 65vh;
-  background: #070809;
+  width: 95vw;
+  max-width: 1200px;
+  height: 85vh;
   border-radius: 0.5rem;
-  border: 1px solid #30373d;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
 }
 
 .pointsnormal {
@@ -255,37 +229,41 @@
 
   .main {
     padding: 1rem;
-    max-height: 90vh;
+    max-height: 100vh;
+    height: 100vh;
   }
 
   .cloud {
     width: 22rem;
     height: 28rem;
   }
+
   .textarea {
     width: 22rem;
   }
+
   .topnav {
     border: 1px solid black;
     align-items: center;
     padding: 0.85rem 0.75rem 0.85rem 0.75rem;
   }
 
-.markdownanswer code {
-  white-space : pre-wrap !important;
-}
+  .markdownanswer code {
+    white-space: pre-wrap !important;
+  }
 
-.footer {
-  font-size: 0.7rem;
-  width: 100%;
-  text-align: center;
-}
+  .footer {
+    font-size: 0.7rem;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -296,3 +274,60 @@
   opacity: 0;
 }
 
+
+
+
+
+
+/* Bubbles for both User and API messages */
+.usermessage, .apimessage, .usermessagewaiting {
+  position: relative;
+  font-size: 16px;
+  padding: 10px 20px 10px 10px;
+  width: fit-content;
+  max-width: 60%;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  color: white;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.15)
+}
+
+/* User Message */
+.usermessage, .usermessagewaiting {
+  background: #0084FF; /* Messenger's Blue Color */
+  margin-left: auto;
+}
+
+/* User Message Waiting with Fade-In */
+.usermessagewaiting {
+  animation: fadein 2s;
+}
+
+/* API (response) Message */
+.apimessage {
+  color: black;
+  background: #F1F0F0; /* Light Gray */
+  margin-right: auto;
+}
+
+/* Input Textarea */
+.textarea {
+  position: relative;
+  resize: none;
+  font-size: 16px;
+  padding: 22px;
+  width: calc(100vw - 100px); /* adjust as necessary */
+  max-width: 1200px;
+  border: none;
+  border-radius: 12px;
+  background: #F4F7F9;
+  color: #000000;
+  outline: none;
+  margin: 10px 0;
+  float: left; /* aligns to left */
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

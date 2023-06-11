@@ -24,7 +24,7 @@
     "dotenv": "^16.0.3",
     "epub2": "^3.0.1",
     "eslint": "8.38.0",
-    "eslint-config-next": "^13.3.0",
+    "eslint-config-next": "^13.4.5",
     "hnswlib-node": "^1.4.2",
     "html-to-text": "^9.0.5",
     "langchain": "^0.0.55",

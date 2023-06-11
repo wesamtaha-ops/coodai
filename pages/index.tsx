@@ -1,46 +1,37 @@
-import { useState, useRef, useEffect, useMemo } from "react";
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import Image from "next/image";
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import CircularProgress from "@mui/material/CircularProgress";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { useState, useRef, useEffect, useMemo } from 'react'
+import Head from 'next/head'
+import styles from '../styles/Home.module.css'
+import Image from 'next/image';
+import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import CircularProgress from '@mui/material/CircularProgress';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 import remarkGfm from "remark-gfm";
 import { useRouter } from "next/router";
-
 type Message = {
   type: "apiMessage" | "userMessage";
   message: string;
   isStreaming?: boolean;
-};
+}
 
 export default function Home() {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
-
   const router = useRouter();
-  const { client } = router.query;
-  const [clientName, setClientName] = useState(client);
 
-  const [messageState, setMessageState] = useState<{
-    messages: Message[];
-    pending?: string;
-    history: [string, string][];
-  }>({
-    messages: [
-      {
-        message: "Hello, I'm " + client + " BOT. How can I help you?",
-        type: "apiMessage",
-      },
-    ],
-    history: [],
+
+  const [messageState, setMessageState] = useState<{ messages: Message[], pending?: string, history: [string, string][] }>({
+    messages: [{
+      "message": "Hi, I'm Your AI assistant for Your Data. How can I help you?",
+      "type": "apiMessage"
+    }],
+    history: []
   });
   const { messages, pending, history } = messageState;
+  const { client } = router.query;
 
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
 
   // Auto scroll chat to bottom
   useEffect(() => {
@@ -64,60 +55,54 @@ export default function Home() {
       return;
     }
 
-    setMessageState((state) => ({
+    setMessageState(state => ({
       ...state,
-      messages: [
-        ...state.messages,
-        {
-          type: "userMessage",
-          message: question,
-        },
-      ],
-      pending: undefined,
+      messages: [...state.messages, {
+        type: "userMessage",
+        message: question
+      }],
+      pending: undefined
     }));
 
     setLoading(true);
     setUserInput("");
-    setMessageState((state) => ({ ...state, pending: "" }));
+    setMessageState(state => ({ ...state, pending: "" }));
 
     const ctrl = new AbortController();
 
-    fetchEventSource("/api/chat", {
-      method: "POST",
+    fetchEventSource('/api/chat', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         question,
         history,
-        client,
+        client
       }),
       signal: ctrl.signal,
       onmessage: (event) => {
         if (event.data === "[DONE]") {
-          setMessageState((state) => ({
+          setMessageState(state => ({
             history: [...state.history, [question, state.pending ?? ""]],
-            messages: [
-              ...state.messages,
-              {
-                type: "apiMessage",
-                message: state.pending ?? "",
-              },
-            ],
-            pending: undefined,
+            messages: [...state.messages, {
+              type: "apiMessage",
+              message: state.pending ?? "",
+            }],
+            pending: undefined
           }));
           setLoading(false);
           ctrl.abort();
         } else {
           const data = JSON.parse(event.data);
-          setMessageState((state) => ({
+          setMessageState(state => ({
             ...state,
             pending: (state.pending ?? "") + data.data,
           }));
         }
-      },
+      }
     });
-  };
+  }
 
   // Prevent blank submissions and allow for multiline input
   const handleEnter = (e: any) => {
@@ -131,43 +116,27 @@ export default function Home() {
   };
 
   const chatMessages = useMemo(() => {
-    return [
-      ...messages,
-      ...(pending ? [{ type: "apiMessage", message: pending }] : []),
-    ];
+    return [...messages, ...(pending ? [{ type: "apiMessage", message: pending }] : [])];
   }, [messages, pending]);
 
   return (
     <>
       <Head>
-        {/* Primary Meta Tags */}
-        <title>{client} Chatbot</title>
-        <meta name="title" content="Chatbot" />
-        <meta name="description" content="Chatbot" />
+        {/* <!-- Primary Meta Tags --> */}
+        <title>{client} Your Data</title>
+        <meta name="title" content="Chat Your Data" />
+        <meta
+          name="description"
+          content="Using AI to ask questions of your data"
+        />
 
-        {/* Open Graph / Facebook */}
+        {/* <!-- Open Graph / Facebook --> */}
 
-        {/* Twitter */}
+        {/* <!-- Twitter --> */}
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.topnav}>
-        <div>
-          <Link href="/">
-            <h1 className={styles.navlogo}>{client} Chat</h1>
-          </Link>
-        </div>
-        <div className={styles.navlinks}>
-          <a
-            href="https://github.com/hillis/chat-your-data"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {client} Chat
-          </a>
-        </div>
-      </div>
       <main className={styles.main}>
         <div className={styles.cloud}>
           <div ref={messageListRef} className={styles.messagelist}>

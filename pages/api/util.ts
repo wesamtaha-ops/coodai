@@ -1,6 +1,6 @@
 import { OpenAIChat } from "langchain/llms/openai";
 import { LLMChain, loadQAChain, ChatVectorDBQAChain, StuffDocumentsChain, VectorDBQAChain } from "langchain/chains";
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
+import { HNSWLib } from "langchain/vectorstores";
 import { ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
 import { CallbackManager } from "langchain/callbacks";
 import { ChainValues } from "langchain/schema";
@@ -16,7 +16,7 @@ const QA_PROMPT = PromptTemplate.fromTemplate(`{question}`);
 
 const CONDENSE_PROMPT =
   PromptTemplate.fromTemplate(`Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
-
+  If the question is in Arabic Please answer in Arabic. Don't answer in English.  
 Chat History:
 {chat_history}
 Follow Up Input: {question}
@@ -25,8 +25,10 @@ Standalone question:`);
 const CHAT_PROMPT = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
     `You are an AI assistant. 
-You are given the following data and the context is between two '========='. Provide conversational answers in Markdown syntax with links formatted as hyperlinks.
-You can also answer questions about any data found in the index.   
+The context is between two '========='.
+You can also answer questions about any data found in the index.  
+If the context is in Arabic Please answer in Arabic. Don't answer in English.  
+If the question is in Arabic Please answer in Arabic. Don't answer in English.   
 =========
 {context}
 =========` ),
@@ -35,9 +37,11 @@ You can also answer questions about any data found in the index.
 
 
 const SYSTEM_MESSAGE = PromptTemplate.fromTemplate(
-  `You are an AI assistant. Anything you are not able to answer say I do not know.
-You are given the following data and the context is between two '========='. Provide conversational answers in Markdown syntax with links formatted as hyperlinks.
+  `You are an AI assistant that knows about my business, Anything you are not able to answer say I do not know.
+You are given the following data about my business.  The context is between two '========='.
 If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.  
+If the context is in Arabic Please answer in Arabic. Don't answer in English.  
+If the question is in Arabic Please answer in Arabic. Don't answer in English.  
 =========
 {context}
 =========`
@@ -65,84 +69,84 @@ If the context is empty or you don't know the answer, just tell them that you di
 // After: Find related docs from the question -> combine docs and insert them into predefined system message -> pass in the chat history -> generate answer
 
 
-// //Exporting OpenAIChatLLMChain to be used in the custom qa chain
-// export class OpenAIChatLLMChain extends LLMChain implements LLMChainInput {
-//   async _call(values: ChainValues): Promise<ChainValues> {
-//     let stop;
-//     if ("stop" in values && Array.isArray(values.stop)) {
-//       stop = values.stop;
-//     }
-//     const { chat_history } = values;
-//     const prefixMessages = chat_history.map((message: string[]) => {
-//       return [
-//         {
-//           role: "user",
-//           content: message[0]
-//         },
-//         {
-//           role: "assistant",
-//           content: message[1]
-//         }
-//       ]
-//     }).flat();
+//Exporting OpenAIChatLLMChain to be used in the custom qa chain
+export class OpenAIChatLLMChain extends LLMChain implements LLMChainInput {
+  async _call(values: ChainValues): Promise<ChainValues> {
+    let stop;
+    if ("stop" in values && Array.isArray(values.stop)) {
+      stop = values.stop;
+    }
+    const { chat_history } = values;
+    const prefixMessages = chat_history.map((message: string[]) => {
+      return [
+        {
+          role: "user",
+          content: message[0]
+        },
+        {
+          role: "assistant",
+          content: message[1]
+        }
+      ]
+    }).flat();
 
-//     const formattedSystemMessage = await SYSTEM_MESSAGE.format({ context: values.context })
-//     // @ts-ignore
-//     this.llm.prefixMessages = [
-//       {
-//         role: "system",
-//         content: formattedSystemMessage
-//       },
-//       {
-//         role: "assistant",
-//         content: "أهلا بك أنا روبوت الذكاء الصناعي .. لقد ولدت حديثا لكنني أستطيع مساعدتك بكل حب والتكلم معك ب 94 لغة. إذا أردت التحدث معي بالعربية أرجو أن تقول لي : تحدث بالعربية"
-//       },
-//       ...prefixMessages];
-//     const formattedString = await this.prompt.format(values);
-//     const llmResult = await this.llm.call(formattedString, stop);
-//     const result = { [this.outputKey]: llmResult };
-//     return result;
-//   }
-// }
+    const formattedSystemMessage = await SYSTEM_MESSAGE.format({ context: values.context })
+    // @ts-ignore
+    this.llm.prefixMessages = [
+      {
+        role: "system",
+        content: formattedSystemMessage
+      },
+      {
+        role: "assistant",
+        content: "Hi, I'm an AI assistant for Alabama High School Sports. How can I help you?"
+      },
+      ...prefixMessages];
+    const formattedString = await this.prompt.format(values);
+    const llmResult = await this.llm.call(formattedString, stop);
+    const result = { [this.outputKey]: llmResult };
+    return result;
+  }
+}
 
 
-// //Class to pass in the chat history to the LLMChain
-// class ChatStuffDocumentsChain extends StuffDocumentsChain {
-//   async _call(values: ChainValues): Promise<ChainValues> {
-//     if (!(this.inputKey in values)) {
-//       throw new Error(`Document key ${this.inputKey} not found.`);
-//     }
-//     const { [this.inputKey]: docs, ...rest } = values;
-//     const texts = (docs as Document[]).map(({ pageContent }) => pageContent);
-//     const text = texts.join("\n\n");
-//     const result = await this.llmChain.call({
-//       ...rest,
-//       [this.documentVariableName]: text,
-//     });
-//     return result;
-//   }
-// }
+//Class to pass in the chat history to the LLMChain
+class ChatStuffDocumentsChain extends StuffDocumentsChain {
+  async _call(values: ChainValues): Promise<ChainValues> {
+    if (!(this.inputKey in values)) {
+      throw new Error(`Document key ${this.inputKey} not found.`);
+    }
+    const { [this.inputKey]: docs, ...rest } = values;
+    const texts = (docs as Document[]).map(({ pageContent }) => pageContent);
+    const text = texts.join("\n\n");
+    const result = await this.llmChain.call({
+      ...rest,
+      [this.documentVariableName]: text,
+    });
+    return result;
+  }
+}
 
-// class OpenAIChatVectorDBQAChain extends VectorDBQAChain {
-//   async _call(values: ChainValues): Promise<ChainValues> {
-//     if (!(this.inputKey in values)) {
-//       throw new Error(`Question key ${this.inputKey} not found.`);
-//     }
-//     const question: string = values[this.inputKey];
-//     const docs = await this.vectorstore.similaritySearch(question, this.k);
+class OpenAIChatVectorDBQAChain extends VectorDBQAChain {
+  async _call(values: ChainValues): Promise<ChainValues> {
+    if (!(this.inputKey in values)) {
+      throw new Error(`Question key ${this.inputKey} not found.`);
+    }
+    const question: string = values[this.inputKey];
+    const docs = await this.vectorstore.similaritySearch(question, this.k);
 
-//     // all of this just to pass chat history to the LLMChain
-//     const inputs = { question, input_documents: docs, chat_history: values.chat_history };
-//     const result = await this.combineDocumentsChain.call(inputs);
-//     return result;
-//   }
-// }
+    // all of this just to pass chat history to the LLMChain
+    const inputs = { question, input_documents: docs, chat_history: values.chat_history };
+    const result = await this.combineDocumentsChain.call(inputs);
+    return result;
+  }
+}
 
-// interface qaParams {
-//   prompt?: PromptTemplate
-// }
+interface qaParams {
+  prompt?: PromptTemplate
+}
 
-// // use this custom qa chain instead of the default one
+// use this custom qa chain instead of the default one
 //const loadQAChain = (llm: BaseLLM, params: qaParams = {}) => {
 //  const { prompt = QA_PROMPT } = params;
 //  const llmChain = new OpenAIChatLLMChain({ prompt, llm });
@@ -164,9 +168,9 @@ export const makeChain = (
   const docChain = loadQAChain(
     new OpenAIChat({
       temperature: 0,
-      // maxTokens: 100,
-      // modelName: 'gpt-4',  //Comment out ModelName to use the default model GPT-3.5-Turbo
-      streaming: Boolean(onTokenStream),
+      maxTokens: 2000,
+      modelName: 'gpt-3.5-turbo', //change this to older versions (e.g. gpt-3.5-turbo) if you don't have access to gpt-4
+      streaming: true,
       callbackManager: onTokenStream
         ? CallbackManager.fromHandlers({
           async handleLLMNewToken(token) {
@@ -183,8 +187,8 @@ export const makeChain = (
     vectorstore,
     combineDocumentsChain: docChain,
     questionGeneratorChain: questionGenerator,
-    //returnSourceDocuments: true,
-    //k: 1, // number of source documents to return
+    returnSourceDocuments: true,
+    k: 1, // number of source documents to return
 
   });
 }
