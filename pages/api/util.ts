@@ -70,81 +70,81 @@ If the question is in Arabic Please answer in Arabic. Don't answer in English.
 
 
 //Exporting OpenAIChatLLMChain to be used in the custom qa chain
-export class OpenAIChatLLMChain extends LLMChain implements LLMChainInput {
-  async _call(values: ChainValues): Promise<ChainValues> {
-    let stop;
-    if ("stop" in values && Array.isArray(values.stop)) {
-      stop = values.stop;
-    }
-    const { chat_history } = values;
-    const prefixMessages = chat_history.map((message: string[]) => {
-      return [
-        {
-          role: "user",
-          content: message[0]
-        },
-        {
-          role: "assistant",
-          content: message[1]
-        }
-      ]
-    }).flat();
+// export class OpenAIChatLLMChain extends LLMChain implements LLMChainInput {
+//   async _call(values: ChainValues): Promise<ChainValues> {
+//     let stop;
+//     if ("stop" in values && Array.isArray(values.stop)) {
+//       stop = values.stop;
+//     }
+//     const { chat_history } = values;
+//     const prefixMessages = chat_history.map((message: string[]) => {
+//       return [
+//         {
+//           role: "user",
+//           content: message[0]
+//         },
+//         {
+//           role: "assistant",
+//           content: message[1]
+//         }
+//       ]
+//     }).flat();
 
-    const formattedSystemMessage = await SYSTEM_MESSAGE.format({ context: values.context })
-    // @ts-ignore
-    this.llm.prefixMessages = [
-      {
-        role: "system",
-        content: formattedSystemMessage
-      },
-      {
-        role: "assistant",
-        content: "Hi, I'm an AI assistant for Alabama High School Sports. How can I help you?"
-      },
-      ...prefixMessages];
-    const formattedString = await this.prompt.format(values);
-    const llmResult = await this.llm.call(formattedString, stop);
-    const result = { [this.outputKey]: llmResult };
-    return result;
-  }
-}
+//     const formattedSystemMessage = await SYSTEM_MESSAGE.format({ context: values.context })
+//     // @ts-ignore
+//     this.llm.prefixMessages = [
+//       {
+//         role: "system",
+//         content: formattedSystemMessage
+//       },
+//       {
+//         role: "assistant",
+//         content: "Hi, I'm an AI assistant for Alabama High School Sports. How can I help you?"
+//       },
+//       ...prefixMessages];
+//     const formattedString = await this.prompt.format(values);
+//     const llmResult = await this.llm.call(formattedString, stop);
+//     const result = { [this.outputKey]: llmResult };
+//     return result;
+//   }
+// }
 
 
-//Class to pass in the chat history to the LLMChain
-class ChatStuffDocumentsChain extends StuffDocumentsChain {
-  async _call(values: ChainValues): Promise<ChainValues> {
-    if (!(this.inputKey in values)) {
-      throw new Error(`Document key ${this.inputKey} not found.`);
-    }
-    const { [this.inputKey]: docs, ...rest } = values;
-    const texts = (docs as Document[]).map(({ pageContent }) => pageContent);
-    const text = texts.join("\n\n");
-    const result = await this.llmChain.call({
-      ...rest,
-      [this.documentVariableName]: text,
-    });
-    return result;
-  }
-}
+// //Class to pass in the chat history to the LLMChain
+// class ChatStuffDocumentsChain extends StuffDocumentsChain {
+//   async _call(values: ChainValues): Promise<ChainValues> {
+//     if (!(this.inputKey in values)) {
+//       throw new Error(`Document key ${this.inputKey} not found.`);
+//     }
+//     const { [this.inputKey]: docs, ...rest } = values;
+//     const texts = (docs as Document[]).map(({ pageContent }) => pageContent);
+//     const text = texts.join("\n\n");
+//     const result = await this.llmChain.call({
+//       ...rest,
+//       [this.documentVariableName]: text,
+//     });
+//     return result;
+//   }
+// }
 
-class OpenAIChatVectorDBQAChain extends VectorDBQAChain {
-  async _call(values: ChainValues): Promise<ChainValues> {
-    if (!(this.inputKey in values)) {
-      throw new Error(`Question key ${this.inputKey} not found.`);
-    }
-    const question: string = values[this.inputKey];
-    const docs = await this.vectorstore.similaritySearch(question, this.k);
+// class OpenAIChatVectorDBQAChain extends VectorDBQAChain {
+//   async _call(values: ChainValues): Promise<ChainValues> {
+//     if (!(this.inputKey in values)) {
+//       throw new Error(`Question key ${this.inputKey} not found.`);
+//     }
+//     const question: string = values[this.inputKey];
+//     const docs = await this.vectorstore.similaritySearch(question, this.k);
 
-    // all of this just to pass chat history to the LLMChain
-    const inputs = { question, input_documents: docs, chat_history: values.chat_history };
-    const result = await this.combineDocumentsChain.call(inputs);
-    return result;
-  }
-}
+//     // all of this just to pass chat history to the LLMChain
+//     const inputs = { question, input_documents: docs, chat_history: values.chat_history };
+//     const result = await this.combineDocumentsChain.call(inputs);
+//     return result;
+//   }
+// }
 
-interface qaParams {
-  prompt?: PromptTemplate
-}
+// interface qaParams {
+//   prompt?: PromptTemplate
+// }
 
 // use this custom qa chain instead of the default one
 //const loadQAChain = (llm: BaseLLM, params: qaParams = {}) => {
