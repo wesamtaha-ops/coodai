@@ -5,7 +5,7 @@ import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { CSVLoader } from "langchain/document_loaders/fs/csv";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
 import { TextLoader } from "langchain/document_loaders/fs/text";
-import { PlaywrightWebBaseLoader } from "langchain/document_loaders/web/playwright";
+// import { PlaywrightWebBaseLoader } from "langchain/document_loaders/web/playwright";
 import path from 'path';
 import fs from 'fs';
 
@@ -45,36 +45,36 @@ async function runIngest(clientFolder: string) {
         const ext = path.extname(FILENAMES[i]);
         let rawDocs;
 
-        if (FILENAMES[i].includes('https://')) {
-            const loader = new PlaywrightWebBaseLoader(FILENAMES[i], {
-                launchOptions: {
-                    headless: true,
-                },
-                gotoOptions: {
-                    waitUntil: "domcontentloaded",
-                }
-            });
+        // if (FILENAMES[i].includes('https://')) {
+        //     const loader = new PlaywrightWebBaseLoader(FILENAMES[i], {
+        //         launchOptions: {
+        //             headless: true,
+        //         },
+        //         gotoOptions: {
+        //             waitUntil: "domcontentloaded",
+        //         }
+        //     });
+        //     rawDocs = await loader.load();
+        // } else {
+        if (ext === '.txt') {
+            const loader = new TextLoader(FILENAMES[i]);
+            rawDocs = await loader.load();
+            console.log(rawDocs);
+        } else if (ext === '.pdf') {
+            const loader = new PDFLoader(FILENAMES[i]);
+            rawDocs = await loader.load();
+            console.log(rawDocs);
+        } else if (ext === '.csv') {
+            const loader = new CSVLoader(FILENAMES[i]);
+            rawDocs = await loader.load();
+        } else if (ext === '.docx') {
+            const loader = new DocxLoader(FILENAMES[i]);
             rawDocs = await loader.load();
         } else {
-            if (ext === '.txt') {
-                const loader = new TextLoader(FILENAMES[i]);
-                rawDocs = await loader.load();
-                console.log(rawDocs);
-            } else if (ext === '.pdf') {
-                const loader = new PDFLoader(FILENAMES[i]);
-                rawDocs = await loader.load();
-                console.log(rawDocs);
-            } else if (ext === '.csv') {
-                const loader = new CSVLoader(FILENAMES[i]);
-                rawDocs = await loader.load();
-            } else if (ext === '.docx') {
-                const loader = new DocxLoader(FILENAMES[i]);
-                rawDocs = await loader.load();
-            } else {
-                console.log(`Unsupported file type: ${ext}`);
-                continue;
-            }
+            console.log(`Unsupported file type: ${ext}`);
+            continue;
         }
+        //}
 
         console.log(`Loader created for file: ${FILENAMES[i]}`);
 
