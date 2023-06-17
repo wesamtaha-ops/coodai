@@ -15,7 +15,9 @@ export default async function handler(
   if (!question) {
     return res.status(400).json({ message: "No question in the request" });
   }
-
+  const originalDir = process.cwd();
+  process.chdir(originalDir);
+  
   // OpenAI recommends replacing newlines with spaces for best results
   const sanitizedQuestion = question.trim().replaceAll("\n", " ");
   const clientFolder = client as string; // Assuming the client parameter is a string

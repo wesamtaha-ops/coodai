@@ -16,7 +16,8 @@ const QA_PROMPT = PromptTemplate.fromTemplate(`{question}`);
 
 const CONDENSE_PROMPT =
   PromptTemplate.fromTemplate(`Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
-  If the question is in Arabic Please answer in Arabic. Don't answer in English.  
+  If the context is in Arabic Please answer in Arabic and don't answer in English but  
+If the question is in Arabic Please answer in Arabic and don't answer in English.   
 Chat History:
 {chat_history}
 Follow Up Input: {question}
@@ -27,8 +28,8 @@ const CHAT_PROMPT = ChatPromptTemplate.fromPromptMessages([
     `You are an AI assistant. 
 The context is between two '========='.
 You can also answer questions about any data found in the index.  
-If the context is in Arabic Please answer in Arabic. Don't answer in English.  
-If the question is in Arabic Please answer in Arabic. Don't answer in English.   
+If the context is in Arabic Please answer in Arabic and don't answer in English but  
+If the question is in Arabic Please answer in Arabic and don't answer in English.   
 =========
 {context}
 =========` ),
@@ -40,8 +41,8 @@ const SYSTEM_MESSAGE = PromptTemplate.fromTemplate(
   `You are an AI assistant that knows about my business, Anything you are not able to answer say I do not know.
 You are given the following data about my business.  The context is between two '========='.
 If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.  
-If the context is in Arabic Please answer in Arabic. Don't answer in English.  
-If the question is in Arabic Please answer in Arabic. Don't answer in English.  
+If the question is in Arabic Please answer in Arabic and Don't answer in English.  
+If the question is in English Please answer in English and Don't answer in Arabic.  
 =========
 {context}
 =========`

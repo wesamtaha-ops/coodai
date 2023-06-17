@@ -15,7 +15,8 @@ async function runIngest(clientFolder) {
     });
 
     let allDocs = [];
-
+    let originalDir = process.cwd();
+    process.chdir(originalDir);
 
     const dataPath = process.env.dataPath;
     const storeFolderPath = path.resolve(dataPath + clientFolder + '/original/');
@@ -55,7 +56,7 @@ async function runIngest(clientFolder) {
         allDocs = [...allDocs, ...docs];
     }
 
-    const originalDir = process.cwd();
+    originalDir = process.cwd();
     console.log("Creating vector store...");
     const vectorStore = await HNSWLib.fromDocuments(allDocs, new OpenAIEmbeddings());
     fs.mkdirSync(clientFolderPath, { recursive: true });
@@ -77,7 +78,7 @@ module.exports = async (req, res) => {
             res.status(200).send('Ingestion process completed successfully');
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error occurred during ingestion' + error);
+            res.status(500).send('Error occurred during ingestion' + res);
         }
     } else {
         res.status(405).send('Method not allowed'); // only GET method is allowed

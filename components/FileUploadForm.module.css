@@ -4,41 +4,164 @@
   justify-content: center;
   align-items: center;
   height: auto;
-  background-color: #F8F8F8;
 }
 
-.fileUpload {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 5px;
-  padding: 20px;
+.fileManager {
+  margin-top: 20px;
   width: 100%;
+  padding: 40px;
   background-color: #fff;
-  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 10px 30px -5px rgba(47, 43, 43, 0.1);
+  border-radius: 10px;
+}
+
+.fileActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .fileInput {
-  border: 1px solid #CFCFCF;
-  flex-grow: 1;
-  margin-right: 20px;
-  padding: 5px;
+  display: none;
+}
+
+.dropZone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 200px;
+  border: 2px dashed #CFCFCF;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.dragging {
+  border-color: #4CAF50;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  color: #CFCFCF;
+}
+
+.uploadText {
+  margin-top: 20px;
+  font-size: 14px;
   color: #666;
+  text-align: center;
 }
 
 .uploadButton {
   background-color: #4CAF50;
   border: none;
   color: white;
-  padding: 15px 25px;
+  padding: 10px 30px;
+  margin-left: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   transition-duration: 0.4s;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .uploadButton:hover {
   background-color: #45a049;
+}
+
+.selectedFiles {
+  margin-top: 20px;
+  border-top: 1px solid #CFCFCF;
+  padding-top: 10px;
+}
+
+.fileList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.fileList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.fileName {
+  color: black;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.unselectButton,
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 14px;
+  transition-duration: 0.4s;
+  margin-left: 20px;
+}
+
+.unselectButton:hover,
+.deleteButton:hover {
+  color: #f11946;
+}
+
+.error {
+  margin-top: 20px;
+  color: #f11946;
+  font-size: 16px;
+}
+
+.confirmDialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.confirmText {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.confirmButton {
+  background-color: #f11946;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+
+
+
+.uploadButton:disabled {
+  background-color: #8d949e;
+}
+
+.uploadButton.disabled {
+  background-color: #8d949e;
+  cursor: not-allowed;
+}
+
+
+.h4 {
+  color: #1877f2 !important;
+  margin-bottom: 10px;
 }
