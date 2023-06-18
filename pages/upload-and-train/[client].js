@@ -105,7 +105,7 @@ const UploadAndTrain = ({ clientName }) => {
               <div className={styles.fileUploadForm}>
                 <div className={styles.fileManager}>
                   <h1 className={styles.title}>
-                    Upload your documents to train the AI for {clientName}
+                    Upload your documents to train the AI for {clientName}, You Can Upload  PDF, WORD, CSV and TXT Files
                   </h1>
                 </div>
                 <FileUploadForm
@@ -119,7 +119,7 @@ const UploadAndTrain = ({ clientName }) => {
               <div className={styles.fileUploadForm}>
                 <div className={styles.fileManager}>
                   <h1 className={styles.title}>
-                    Your AI Bot can learn from your Website
+                    Your AI Bot can learn from your Website, You add multiple URLs pages and subpages and JSON API.
                   </h1>
                 </div>
                 <WebParserForm clientName={clientName} />
@@ -136,33 +136,15 @@ const UploadAndTrain = ({ clientName }) => {
               </div>
             </TabPanel>
           </Tabs>
-          {/* <div className={styles.fileUploadForm}>
-            <FileUploadForm
-              setDirectoryEmpty={setDirectoryEmpty}
-              directoryEmpty={directoryEmpty}
-              clientName={clientName}
-            />
-          </div>
-          <div className={styles.fileUploadForm}>
-            <WebParserForm
-              clientName={clientName}
-            />
-          </div>
-          <div className={styles.fileUploadForm}>
-            <QuestionAnswersForm
-              clientName={clientName}
-            />
-          </div> */}
 
-          {!directoryEmpty && (
-            <button
-              onClick={handleTrainClick}
-              disabled={loading}
-              className={`${styles.trainButton} ${loading ? styles.disabled : ''}`}
-            >
-              {training ? 'Learning... It might take a few minutes' : 'Train it!'}
-            </button>
-          )}
+
+          <button
+            onClick={handleTrainClick}
+            disabled={loading}
+            className={`${styles.trainButton} ${loading ? styles.disabled : ''}`}
+          >
+            {training ? 'Learning... It might take a few minutes' : 'Train it now !'}
+          </button>
         </TabPanel>
 
         <TabPanel

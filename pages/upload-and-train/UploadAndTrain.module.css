@@ -16,7 +16,7 @@
 }
 
 .trainButton {
-  background-color: #1877f2;
+  background-color: #000000;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -32,7 +32,7 @@
 }
 
 .trainButton:hover {
-  background-color: #166fe5;
+  background-color: #000000;
 }
 
 .trainButton.disabled {
