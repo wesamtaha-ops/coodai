@@ -116,10 +116,24 @@ const UploadAndTrain = ({ clientName }) => {
               </div>
             </TabPanel>
             <TabPanel className={`${styles.subtabPanel} ${selectedSubTab === 1 ? styles.active : ''}`}>
-              <h3>Content for Subtab 2</h3>
+              <div className={styles.fileUploadForm}>
+                <div className={styles.fileManager}>
+                  <h1 className={styles.title}>
+                    Your AI Bot can learn from your Website
+                  </h1>
+                </div>
+                <WebParserForm clientName={clientName} />
+              </div>
             </TabPanel>
             <TabPanel className={`${styles.subtabPanel} ${selectedSubTab === 2 ? styles.active : ''}`}>
-              <h3>Content for Subtab 3</h3>
+              <div className={styles.fileUploadForm}>
+                <div className={styles.fileManager}>
+                  <h1 className={styles.title}>
+                    Your AI Bot can learn from list of Questions and Answers
+                  </h1>
+                </div>
+                <QuestionAnswersForm clientName={clientName} />
+              </div>
             </TabPanel>
           </Tabs>
           {/* <div className={styles.fileUploadForm}>

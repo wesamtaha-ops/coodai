@@ -1,0 +1,79 @@
+.container {
+    margin: 0px;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.form {
+    margin-top: 40px;
+    padding: 0;
+    width: 100%;
+}
+
+.inputContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-direction: column;
+}
+
+.inputContainer input[type="text"],
+.inputContainer textarea {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    width: 100%;
+    min-height: 40px;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.qaContainer {
+    margin-top: 20px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.qaItem {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.qaItem input[type="text"],
+.qaItem textarea {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    width: 300px;
+    min-height: 40px;
+}
+
+.qaItem button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+}
