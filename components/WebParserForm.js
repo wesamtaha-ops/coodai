@@ -29,12 +29,16 @@ const WebParserForm = ({ clientName }) => {
       return;
     }
 
-    if (urls.includes(textInput.trim())) {
+    if (urls && urls.length && urls.includes(textInput.trim())) {
       setError('URL already exists. Please enter a unique URL.');
       return;
     }
-
-    const newUrls = [...urls, textInput.trim()];
+    let newUrls = [];
+    if (urls && urls.length >= 1) {
+      newUrls = [...urls, textInput.trim()];
+    } else {
+      newUrls = [textInput.trim()];
+    }
     setUrls(newUrls);
     setTextInput('');
 
@@ -116,7 +120,7 @@ const WebParserForm = ({ clientName }) => {
             marginBottom: '10px',
           }} >Included Links</h5>
 
-          {urls.map((url, index) => (
+          {urls && urls.length && urls.map((url, index) => (
             <div key={index} className={styles.urlItem}>
               <input
                 type="text"

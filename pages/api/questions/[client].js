@@ -9,8 +9,13 @@ export default function handler(req, res) {
       const dataPath = process.env.dataPath;
       const clientFolderPath = path.resolve(dataPath, client, 'original');
       const qaFilePath = path.join(clientFolderPath, 'qa.txt');
+
+      if (!fs.existsSync(qaFilePath)) {
+        fs.writeFileSync(qaFilePath, '', 'utf8');
+      }
+
       const qaData = fs.readFileSync(qaFilePath, 'utf8').trim().split('\n');
-      const qaLines = qaData.filter((line) => line.length >= 5); // Filter lines with length >= 5 characters
+      const qaLines = qaData.filter((line) => line.length >= 5);
       const questions = qaLines.map((line) => line.split('|')[0]);
       const answers = qaLines.map((line) => line.split('|')[1]);
       res.status(200).json({ questions, answers });

@@ -52,8 +52,9 @@ async function runIngest(clientFolder) {
         let rawDocs;
 
         // Handle txt files
-        if (ext === '.txt') {
-            if (fileName === 'urls.txt') continue; // Exclude urls.txt from ingestion
+        if (ext === '.txt' || ext === '.json') {
+            if (fileName === 'urls.txt') continue;
+            if (fileName === 'style.json') continue; // Exclude urls.txt from ingestion
             // const fileContent = fs.readFileSync(filePath, 'utf8');
             // if (fileContent.trim() === '' || fileName === 'qa.txt') continue; // Skip empty txt files and qa.txt
             const loader = new TextLoader(filePath);

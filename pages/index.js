@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
+import axios from 'axios';
 
 export default function Home({ initialClient }) {
   const [userInput, setUserInput] = useState('');
@@ -29,6 +30,20 @@ export default function Home({ initialClient }) {
 
   const messageListRef = useRef(null);
   const textAreaRef = useRef(null);
+  const [customStyle, setCustomStyle] = useState([]);
+  const [error, setError] = useState('');
+  const [clientName, setClientName] = useState(initialClient);
+
+  const fetchUrls = async () => {
+    try {
+      const response = await axios.get(`/api/urls/${clientName}?file=style.json`);
+      setCustomStyle(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error(error);
+      setError('Error fetching URLs.');
+    }
+  };
 
   // Auto scroll chat to bottom
   useEffect(() => {
@@ -36,6 +51,7 @@ export default function Home({ initialClient }) {
     if (messageList) {
       messageList.scrollTop = messageList.scrollHeight;
     }
+    fetchUrls();
   }, [pending]);
 
   // Focus on text field on load
@@ -135,15 +151,16 @@ export default function Home({ initialClient }) {
 
         <meta name="title" content="Chat Your Data" />
         <meta name="description" content="Using AI to ask questions of your data" />
-
         {/* <!-- Open Graph / Facebook --> */}
 
         {/* <!-- Twitter --> */}
-
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Almarai&display=swap" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
+      <main className={styles.main} style={{ backgroundColor: customStyle.mainBG || '#f9f9f9', fontFamily: customStyle.mainFont || 'Arial' }} >
         <div className={styles.cloud}>
           <div ref={messageListRef} className={styles.messagelist}>
             {chatMessages.map((message, index) => {
@@ -153,7 +170,7 @@ export default function Home({ initialClient }) {
               if (message.type === 'apiMessage') {
                 icon = (
                   <Image
-                    src="/chatIcon.png"
+                    src={customStyle.chatIcon || "/chatIcon.png"}
                     alt="AI"
                     width="30"
                     height="30"
@@ -165,11 +182,12 @@ export default function Home({ initialClient }) {
               } else {
                 icon = (
                   <Image
-                    src="/usericon.png"
+                    src={customStyle.userIcon || "https://cdn.jawwy.tv/9/avatar-smile.svg"}
                     alt="Me"
-                    width="30"
-                    height="30"
+                    width="35"
+                    height="35"
                     className={styles.usericon}
+                    style={{ backgroundColor: customStyle.userIconColor || '#f9f9f9' }}
                     priority
                   />
                 );
@@ -181,9 +199,9 @@ export default function Home({ initialClient }) {
                     : styles.usermessage;
               }
               return (
-                <div key={index} className={className}>
+                <div key={index} className={className} style={{ backgroundColor: customStyle.messageBG }}>
                   {icon}
-                  <div className={styles.markdownanswer}>
+                  <div className={styles.markdownanswer} style={{ backgroundColor: customStyle.messageBG, color: customStyle.messageColor, fontFamily: customStyle.mainFont || 'Arial' }}>
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       linkTarget="_blank"
@@ -214,11 +232,12 @@ export default function Home({ initialClient }) {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 className={styles.textarea}
+                style={{ backgroundColor: customStyle.promptBG || '#F1F1F1', color: customStyle.promptColor || '#000000', fontFamily: customStyle.mainFont || 'Arial' }}
               />
               <button
                 type="submit"
                 disabled={loading}
-                className={styles.generatebutton}
+                className={styles.generatebutton} style={{ backgroundColor: customStyle.submitBG || '#0084FF' }}
               >
                 {loading ? (
                   <div className={styles.loadingwheel}>
