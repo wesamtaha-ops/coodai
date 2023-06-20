@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import CircularProgress from '@mui/material/CircularProgress';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw'
 
 export default function Home({ initialClient }) {
   const [userInput, setUserInput] = useState('');
@@ -121,6 +122,11 @@ export default function Home({ initialClient }) {
     return [...messages, ...(pending ? [{ type: 'apiMessage', message: pending }] : [])];
   }, [messages, pending]);
 
+  function ImageRenderer(props) {
+    const { src, alt } = props;
+    return <img src={src} alt={alt} style={{ maxWidth: "100%" }} />;
+  }
+
   return (
     <>
       <Head>
@@ -178,7 +184,12 @@ export default function Home({ initialClient }) {
                 <div key={index} className={className}>
                   {icon}
                   <div className={styles.markdownanswer}>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      linkTarget="_blank"
+                      escapeHtml={false}
+                      rehypePlugins={[rehypeRaw]}
+                    >
                       {message.message}
                     </ReactMarkdown>
                   </div>

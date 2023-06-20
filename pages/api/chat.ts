@@ -32,6 +32,7 @@ export default async function handler(
   });
 
   const sendData = (data: string) => {
+    console.log(data);
     res.write(`data: ${data}\n\n`);
   };
 

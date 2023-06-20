@@ -1,21 +1,20 @@
 import { OpenAIChat } from "langchain/llms/openai";
-import { LLMChain, loadQAChain, ChatVectorDBQAChain, StuffDocumentsChain, VectorDBQAChain } from "langchain/chains";
+import { LLMChain, loadQAChain, ChatVectorDBQAChain, RefineDocumentsChain } from "langchain/chains";
 import { HNSWLib } from "langchain/vectorstores";
 import { ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
 import { CallbackManager } from "langchain/callbacks";
-import { ChainValues } from "langchain/schema";
-import { LLMChainInput } from "langchain/dist/chains/llm_chain";
-
-
-
-
-
-//PromptTemplate is a template that can be used to generate a prompt
 
 const QA_PROMPT = PromptTemplate.fromTemplate(`{question}`);
 
 const CONDENSE_PROMPT =
-  PromptTemplate.fromTemplate(`Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
+  PromptTemplate.fromTemplate(`
+  You are an AI assistant For STCTV, Your job is to recommend a movie or TV Show based on the uploaded data and input that indexed on platform.
+  Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
+  you can start the conversation by greeting the user then prompt the user to ask him what he want to watch don't recommend anything in advance.
+  if the content doesn't exist in the index Say Sorry I couldn't find what you are looking for.
+  The content you recommend Should be from the index of movies and TV Shows Only. don't recommend content outside the uploaded data.
+  If the question is in Arabic Please answer in Arabic. Don't answer in English.  
+  don't recommend content that is not related to the indexed data.
  Chat History:
 {chat_history}
 Follow Up Input: {question}
@@ -23,11 +22,17 @@ Standalone question:`);
 
 const CHAT_PROMPT = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
-    `You are an AI assistant. 
+    `Task: 
+    I want you to act as a Movies and TV shows expert you will recommend movies and TV Shows to me. The content you recommend Should be from the index of movies and TV Shows Only. don't recommend content outside the uploaded data. Please commit to the provided data. don't recommend content that is not related to the indexed data and don't make up data.
+    Topic: Please include the reason for your recommendation in your answer. The reason should be related to the user's request.  don't recommend anything in advance without the user asking for it.
+    Style: Creative
+    Tone: Confident
+    Audience: 30-year old
+    Format: markdown
 The context is between two '========='.
-You can also answer questions about any data found in the index.  
-If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.
-If the {question} is in Arabic Please answer in Arabic and don't answer in English but if the {question} is in English Please answer in English and don't answer in Arabic ignore numbers in this condition.
+You can suggest the content by using the following format [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
+Any recommendation must be atatched with Poster in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
+If the question is in Arabic Please answer in Arabic. Don't answer in English.  
 =========
 {context}
 =========` ),
@@ -35,122 +40,7 @@ If the {question} is in Arabic Please answer in Arabic and don't answer in Engli
 ]);
 
 
-// const SYSTEM_MESSAGE = PromptTemplate.fromTemplate(
-//   `You are an AI assistant that knows about my business, Anything you are not able to answer say I do not know.
-// You are given the following data about my business.  The context is between two '========='.
-// If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.  
-// If the context is in Arabic Please answer in Arabic and don't answer in English but if the context is in English Please answer in English and don't answer in Arabic.
-// =========
-// {context}
-// =========`
-// );
-//
-//  Saved Version for FHA Loan Data
-//(
-//  `You are an AI assistant for the FHA Home Loans. Anything you are not able to answer refer the user to Hometown Lenders, Inc.
-//You are given the following data with state and county FHA Loan information.  The context is between two '========='. Provide conversational answers in Markdown syntax with links formatted as hyperlinks.
-//If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.  
-//If the question is not about the FHA Loans, Hometown Lenders, Matthew Hillis or has nothing to do with Mortgages, politely inform them that you are tuned to only answer questions about the FHA Loan Limits content.  888-606-8066 is not a valid phone number for Hometown Lenders.
-//Hometown Lenders can not do business or loans in the following states: Georgia.  If the user asks about these states, inform them that Hometown Lenders does not do business in these states.
-//Give the user the name Hometown Lenders, Inc. so they can get ask specific questions from a Licensed Loan Officer.  Hometown Lenders contact information website https://www.htlenders.com/ as a reference with phone number 256-828-8883 and email contact@htlenders.com.  
-//=========
-//{context}
-//=========`
-//);
 
-
-
-// VectorDBQAChain is a chain that uses a vector store to find the most similar document to the question
-// and then uses a documents chain to combine all the documents into a single string
-// and then uses a LLMChain to generate the answer
-// Before: Based on the chat history make singular question -> find related docs from the question -> combine docs and insert them as context -> generate answer
-// After: Find related docs from the question -> combine docs and insert them into predefined system message -> pass in the chat history -> generate answer
-
-
-//Exporting OpenAIChatLLMChain to be used in the custom qa chain
-// export class OpenAIChatLLMChain extends LLMChain implements LLMChainInput {
-//   async _call(values: ChainValues): Promise<ChainValues> {
-//     let stop;
-//     if ("stop" in values && Array.isArray(values.stop)) {
-//       stop = values.stop;
-//     }
-//     const { chat_history } = values;
-//     const prefixMessages = chat_history.map((message: string[]) => {
-//       return [
-//         {
-//           role: "user",
-//           content: message[0]
-//         },
-//         {
-//           role: "assistant",
-//           content: message[1]
-//         }
-//       ]
-//     }).flat();
-
-//     const formattedSystemMessage = await SYSTEM_MESSAGE.format({ context: values.context })
-//     // @ts-ignore
-//     this.llm.prefixMessages = [
-//       {
-//         role: "system",
-//         content: formattedSystemMessage
-//       },
-//       {
-//         role: "assistant",
-//         content: "Hi, I'm an AI assistant for Alabama High School Sports. How can I help you?"
-//       },
-//       ...prefixMessages];
-//     const formattedString = await this.prompt.format(values);
-//     const llmResult = await this.llm.call(formattedString, stop);
-//     const result = { [this.outputKey]: llmResult };
-//     return result;
-//   }
-// }
-
-
-// //Class to pass in the chat history to the LLMChain
-// class ChatStuffDocumentsChain extends StuffDocumentsChain {
-//   async _call(values: ChainValues): Promise<ChainValues> {
-//     if (!(this.inputKey in values)) {
-//       throw new Error(`Document key ${this.inputKey} not found.`);
-//     }
-//     const { [this.inputKey]: docs, ...rest } = values;
-//     const texts = (docs as Document[]).map(({ pageContent }) => pageContent);
-//     const text = texts.join("\n\n");
-//     const result = await this.llmChain.call({
-//       ...rest,
-//       [this.documentVariableName]: text,
-//     });
-//     return result;
-//   }
-// }
-
-// class OpenAIChatVectorDBQAChain extends VectorDBQAChain {
-//   async _call(values: ChainValues): Promise<ChainValues> {
-//     if (!(this.inputKey in values)) {
-//       throw new Error(`Question key ${this.inputKey} not found.`);
-//     }
-//     const question: string = values[this.inputKey];
-//     const docs = await this.vectorstore.similaritySearch(question, this.k);
-
-//     // all of this just to pass chat history to the LLMChain
-//     const inputs = { question, input_documents: docs, chat_history: values.chat_history };
-//     const result = await this.combineDocumentsChain.call(inputs);
-//     return result;
-//   }
-// }
-
-// interface qaParams {
-//   prompt?: PromptTemplate
-// }
-
-// use this custom qa chain instead of the default one
-//const loadQAChain = (llm: BaseLLM, params: qaParams = {}) => {
-//  const { prompt = QA_PROMPT } = params;
-//  const llmChain = new OpenAIChatLLMChain({ prompt, llm });
-//  const chain = new ChatStuffDocumentsChain({ llmChain });
-//  return chain;
-//}
 
 
 export const makeChain = (
@@ -166,7 +56,7 @@ export const makeChain = (
   const docChain = loadQAChain(
     new OpenAIChat({
       temperature: 0,
-      maxTokens: 2000,
+      maxTokens: 3000,
       modelName: 'gpt-3.5-turbo', //change this to older versions (e.g. gpt-3.5-turbo) if you don't have access to gpt-4
       streaming: true,
       callbackManager: onTokenStream
@@ -181,12 +71,17 @@ export const makeChain = (
     { prompt: CHAT_PROMPT }
   );
 
+  const refineDocumentsChain = new RefineDocumentsChain(docChain, vectorstore);
+
+
   return new ChatVectorDBQAChain({
     vectorstore,
-    combineDocumentsChain: docChain,
+    combineDocumentsChain: refineDocumentsChain,
     questionGeneratorChain: questionGenerator,
-    returnSourceDocuments: true,
-    k: 1, // number of source documents to return
+    // returnSourceDocuments: true,
+    // k: 1, // number of source documents to return
 
   });
 }
+
+

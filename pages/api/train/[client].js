@@ -11,8 +11,8 @@ const { PuppeteerWebBaseLoader } = require("langchain/document_loaders/web/puppe
 
 async function runIngest(clientFolder) {
     const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
-        chunkOverlap: 200,
+        chunkSize: 2000,
+        chunkOverlap: 400,
     });
 
     let allDocs = [];
@@ -54,10 +54,8 @@ async function runIngest(clientFolder) {
         // Handle txt files
         if (ext === '.txt') {
             if (fileName === 'urls.txt') continue; // Exclude urls.txt from ingestion
-
-            const fileContent = fs.readFileSync(filePath, 'utf8');
-            if (fileContent.trim() === '' || fileName === 'qa.txt') continue; // Skip empty txt files and qa.txt
-
+            // const fileContent = fs.readFileSync(filePath, 'utf8');
+            // if (fileContent.trim() === '' || fileName === 'qa.txt') continue; // Skip empty txt files and qa.txt
             const loader = new TextLoader(filePath);
             rawDocs = await loader.load();
             console.log(rawDocs);
