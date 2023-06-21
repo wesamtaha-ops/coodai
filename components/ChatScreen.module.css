@@ -1,0 +1,366 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    padding-bottom: 0;
+    background: #f9f9f9;
+    overflow: hidden;
+    box-shadow: 0px 1px 2px 2px #ddd;
+}
+
+.header {
+    width: auto;
+}
+
+.header p {
+    text-align: center;
+}
+
+.apptitle {
+    font-size: 2.5rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+}
+
+.appdescription {
+    font-size: 1.1rem;
+    margin: 1rem;
+}
+
+.link {
+    font-weight: 500;
+}
+
+.cloudform {
+    position: relative;
+    width: 100%;
+
+}
+
+.textarea {
+    position: relative;
+    resize: none;
+    font-size: 16px;
+    padding: 20px 20px;
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid #30373d;
+    background: #F1F1F1;
+    color: #000000;
+    outline: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    /* Adds a soft shadow */
+    margin: 10px 0;
+}
+
+.textarea:disabled {
+    opacity: 0.5;
+}
+
+.textarea::placeholder {
+    color: #5f6368;
+}
+
+.generatebutton {
+    position: absolute;
+    top: 22px;
+    right: 12px;
+    color: #FFFFFF;
+    background: #0084FF;
+    padding: 0.8rem;
+    border: none;
+    display: flex;
+    border-radius: 12px;
+    height: 40px;
+    width: 40px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.generatebutton:hover {
+    background: #0077D7;
+}
+
+.generatebutton:disabled {
+    background: #B2B3B5;
+    cursor: not-allowed;
+}
+
+.svgicon {
+    fill: #FFFFFF;
+    width: 20px;
+    height: 20px;
+
+}
+
+.loadingwheel {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.55rem;
+}
+
+
+
+.messagelist {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    border-radius: 0.5rem;
+    font-family: Almarai;
+}
+
+.messagelist p {
+    font-family: Almarai;
+    font-weight: 300;
+    line-height: 35px;
+}
+
+.messagelist p a {
+    font-family: Almarai;
+    font-weight: 300;
+    line-height: 35px;
+    color: #a54ee1;
+    font-size: 18px;
+}
+
+.messagelistloading {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+
+@keyframes loading-gradient {
+    0% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.apimessage, .usermessage, .usermessagewaiting {
+    display: flex;
+}
+
+.markdownanswer {
+    line-height: 1.75;
+}
+
+.markdownanswer a:hover {
+    opacity: 0.8;
+}
+
+.markdownanswer a {
+    color: #16bed7;
+    font-weight: 500;
+}
+
+.markdownanswer code {
+    color: #15cb19;
+    font-weight: 500;
+    white-space: pre-wrap !important;
+}
+
+.markdownanswer ol, .markdownanswer ul {
+    margin: 1rem;
+}
+
+.boticon, .usericon {
+    margin-right: 1rem;
+    border-radius: 0.1rem;
+    border-radius: 100px;
+}
+
+.markdownanswer h1, .markdownanswer h2, .markdownanswer h3 {
+    font-size: inherit;
+}
+
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+}
+
+.cloud {
+    width: 85vw;
+    max-width: 1200px;
+    height: 85vh;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.pointsnormal {
+    width: 90%;
+    height: 90%;
+}
+
+.pointsdim {
+    width: 90%;
+    height: 90%;
+    opacity: 0.25;
+}
+
+.footer {
+    color: #5f6368;
+    font-size: 0.8rem;
+    margin: 1.5rem;
+}
+
+.footer a {
+    font-weight: 500;
+    color: #7a7d81;
+}
+
+.footer a:hover {
+    opacity: 0.8;
+}
+
+/* Mobile optimization */
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    animation: fadeIn 1s ease-in-out forwards;
+    opacity: 0;
+}
+
+
+
+
+
+
+/* Bubbles for both User and API messages */
+.usermessage, .apimessage, .usermessagewaiting {
+    position: relative;
+    font-size: 16px;
+    padding: 10px 20px 10px 10px;
+    width: fit-content;
+    max-width: 80%;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    color: white;
+    box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.15)
+}
+
+/* User Message */
+.usermessage, .usermessagewaiting {
+    background: #0084FF;
+    /* Messenger's Blue Color */
+    margin-left: auto;
+}
+
+/* User Message Waiting with Fade-In */
+.usermessagewaiting {
+    animation: fadein 2s;
+}
+
+/* API (response) Message */
+.apimessage {
+    color: black;
+    background: #F1F0F0;
+    /* Light Gray */
+    margin-right: auto;
+}
+
+/* Input Textarea */
+.textarea {
+    position: relative;
+    resize: none;
+    font-size: 16px;
+    padding: 22px;
+    width: calc(100vw - 100px);
+    /* adjust as necessary */
+    max-width: 1200px;
+    border: none;
+    border-radius: 12px;
+    background: #F4F7F9;
+    color: #000000;
+    outline: none;
+    margin: 10px 0;
+    float: left;
+    /* aligns to left */
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .main {
+        padding: 1rem;
+        max-height: 100vh;
+        height: 100vh;
+    }
+
+    .cloud {
+        width: 100vw;
+        height: 85vh;
+    }
+
+    .textarea {
+        width: 22rem;
+    }
+
+    .topnav {
+        border: 1px solid black;
+        align-items: center;
+        padding: 0.85rem 0.75rem 0.85rem 0.75rem;
+    }
+
+    .markdownanswer code {
+        white-space: pre-wrap !important;
+    }
+
+    .footer {
+        font-size: 0.7rem;
+        width: 100%;
+        text-align: center;
+    }
+    .usermessage, .apimessage, .usermessagewaiting {
+        max-width: 80% !important;
+        width: 80% !important;
+    }
+}

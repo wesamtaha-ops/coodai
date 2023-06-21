@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import FileUploadForm from '../../components/FileUploadForm';
 import QuestionAnswersForm from '../../components/QuestionAnswersForm';
 import WebParserForm from '../../components/WebParserForm';
-
+import ChatScreen from '../../components/ChatScreen';
 import axios from 'axios';
 import LoadingBar from 'react-top-loading-bar';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -151,14 +151,27 @@ const UploadAndTrain = ({ clientName }) => {
           className={`${styles.tabPanel} ${selectedTab === 1 ? styles.active : ''}`}
         >
           <h2>Settings</h2>
-          <p>This is the content for the Settings tab.</p>
+          <br />
+          <table style={{ width: '100%' }}>
+            <tr>
+              <td style={{ width: '55%' }}>
+
+
+
+              </td>
+              <td style={{ width: '45%', height: '500px' }}>
+                <ChatScreen preview={true} initialClient={clientName} />
+              </td>
+            </tr>
+          </table>
         </TabPanel>
 
         <TabPanel
           className={`${styles.tabPanel} ${selectedTab === 2 ? styles.active : ''}`}
         >
           <h2>Preview</h2>
-          <p>This is the content for the Preview tab.</p>
+          <br />
+          <ChatScreen preview={true} initialClient={clientName} />
         </TabPanel>
 
         <TabPanel

@@ -110,9 +110,9 @@
 }
 
 .tabPanel h2,
-.tabPanel p,
+.tabPanel ,
 .subtabPanel h2,
-.subtabPanel p {
+.subtabPanel  {
   color: #333;
 }
 
