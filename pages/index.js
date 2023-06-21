@@ -228,7 +228,7 @@ export default function Home({ initialClient }) {
                 maxLength={512}
                 id="userInput"
                 name="userInput"
-                placeholder={loading ? 'Waiting for response...' : 'Type your question...'}
+                placeholder={loading ? 'I am thinking Please Wait...' : 'Type your question...'}
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 className={styles.textarea}

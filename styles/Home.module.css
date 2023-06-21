@@ -95,12 +95,13 @@
   fill: #FFFFFF;
   width: 20px;
   height: 20px;
+
 }
 
 .loadingwheel {
   position: absolute;
-  top: 0.2rem;
-  right: 0.25rem;
+  top: 0.4rem;
+  right: 0.55rem;
 }
 
 
