@@ -11,52 +11,91 @@ export default (req, res) => {
 
   const dataPath = process.env.dataPath;
   const clientFolderPath = path.resolve(dataPath, clientFolder, 'original');
-  const fileParam = req.query.file || 'url.txt'; // Use the 'file' query parameter or default to 'url.txt'
+  const fileParam = req.query.file || 'urls.txt'; // Use the 'file' query parameter or default to 'url.txt'
   const filePath = path.join(clientFolderPath, fileParam);
+
+  if (!fs.existsSync(clientFolderPath)) {
+    fs.mkdirSync(clientFolderPath, { recursive: true });
+  }
+  // Check if styles.json and urls.txt files exist, and create them if they don't exist
+  const requiredFiles = ['style.json', 'urls.txt', 'qa.txt'];
+  requiredFiles.forEach((file) => {
+    const filePath = path.join(clientFolderPath, file);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, '', 'utf8');
+    }
+  });
 
   if (req.method === 'GET') {
     try {
-      let fileContent;
-      if (fs.existsSync(filePath)) {
-        fileContent = fs.readFileSync(filePath, 'utf8');
-      } else {
-        if (fileParam === 'styles.json') {
-          const defaultStyles = {
-            // Default styles object
-            mainBG: '#1e252d',
-            mainFont: 'Almarai',
-            chatIcon: 'http://localhost:3999/chatIcon.png',
-            userIcon: 'https://cdn.jawwy.tv/9/avatar-smile.svg',
-            messageBG: '#2c3033',
-            messageColor: '#ffffff',
-            promptBG: '#2c3033',
-            promptColor: '#fff',
-            submitBG: '#ff6a39',
-          };
-          fileContent = JSON.stringify(defaultStyles);
-        } else {
-          fileContent = '';
-        }
-        fs.writeFileSync(filePath, fileContent, 'utf8');
-      }
-
+      const fileContent = fs.readFileSync(filePath, 'utf8');
       let data;
       if (path.extname(fileParam) === '.json') {
-        data = JSON.parse(fileContent);
+        data = fileContent ? JSON.parse(fileContent) : "";
       } else {
-        data = fileContent.split('\n').filter(Boolean);
+        data = fileContent ? fileContent.split('\n').filter(Boolean) : "";
       }
       res.status(200).json({ data });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Error fetching data' });
+      res.status(500).json({ error: 'Error fetching data', message: error.message });
     }
   } else if (req.method === 'POST') {
-    // Rest of the code remains the same
-    // ...
+    const data = req.body.urls;
+    if (!data) {
+      return res.status(400).json({ error: 'Invalid data'});
+    }
+
+    try {
+      let fileContent;
+      if (path.extname(fileParam) === '.json') {
+        fileContent = JSON.stringify(data);
+      } else {
+        fileContent = data.join('\n');
+      }
+      fs.writeFileSync(filePath, fileContent, 'utf8');
+      res.status(200).json({ message: 'Data updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error updating data' });
+    }
   } else if (req.method === 'DELETE') {
-    // Rest of the code remains the same
-    // ...
+    const { query } = url.parse(req.url, true);
+    const lineIndex = parseInt(query.lineIndex);
+
+    if (!Number.isInteger(lineIndex) || lineIndex < 0) {
+      return res.status(400).json({ error: 'Invalid line index' });
+    }
+
+    try {
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      let data;
+      if (path.extname(fileParam) === '.json') {
+        data = JSON.parse(fileContent);
+        if (!Array.isArray(data)) {
+          return res.status(400).json({ error: 'Invalid data format' });
+        }
+      } else {
+        data = fileContent.split('\n').filter(Boolean);
+      }
+
+      if (lineIndex >= data.length) {
+        return res.status(400).json({ error: 'Invalid line index' });
+      }
+
+      data.splice(lineIndex, 1);
+      let updatedFileContent;
+      if (path.extname(fileParam) === '.json') {
+        updatedFileContent = JSON.stringify(data);
+      } else {
+        updatedFileContent = data.join('\n');
+      }
+      fs.writeFileSync(filePath, updatedFileContent, 'utf8');
+      res.status(200).json({ message: 'Data removed successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error removing data' });
+    }
   } else {
     res.status(405).send('Method not allowed');
   }

@@ -14,7 +14,8 @@ const WebParserForm = ({ clientName }) => {
   const fetchUrls = async () => {
     try {
       const response = await axios.get(`/api/urls/${clientName}`);
-      setUrls(response.data.urls);
+      console.log(response.data.data);
+      setUrls(response.data && response.data.data && response.data.data.length ? response.data.data : []);
     } catch (error) {
       console.error(error);
       setError('Error fetching URLs.');
@@ -29,19 +30,14 @@ const WebParserForm = ({ clientName }) => {
       return;
     }
 
-    if (urls && urls.length && urls.includes(textInput.trim())) {
+    if (urls.includes(textInput.trim())) {
       setError('URL already exists. Please enter a unique URL.');
       return;
     }
-    let newUrls = [];
-    if (urls && urls.length >= 1) {
-      newUrls = [...urls, textInput.trim()];
-    } else {
-      newUrls = [textInput.trim()];
-    }
+
+    const newUrls = urls && urls.length ? [...urls, textInput.trim()] : [textInput.trim()];
     setUrls(newUrls);
     setTextInput('');
-
     try {
       await axios.post(`/api/urls/${clientName}`, { urls: newUrls });
     } catch (error) {
@@ -120,7 +116,7 @@ const WebParserForm = ({ clientName }) => {
             marginBottom: '10px',
           }} >Included Links</h5>
 
-          {urls && urls.length && urls.map((url, index) => (
+          {urls.map((url, index) => (
             <div key={index} className={styles.urlItem}>
               <input
                 type="text"
