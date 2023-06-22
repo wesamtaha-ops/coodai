@@ -9,6 +9,7 @@ import axios from 'axios';
 import LoadingBar from 'react-top-loading-bar';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import styles from './UploadAndTrain.module.css';
+import SettingsForm from '../../components/SettingsForm';
 
 const UploadAndTrain = ({ clientName }) => {
   const [loading, setLoading] = useState(false);
@@ -152,18 +153,8 @@ const UploadAndTrain = ({ clientName }) => {
         >
           <h2>Settings</h2>
           <br />
-          <table style={{ width: '100%' }}>
-            <tr>
-              <td style={{ width: '55%' }}>
+          <SettingsForm clientFolder={clientName} />
 
-
-
-              </td>
-              <td style={{ width: '45%', height: '500px' }}>
-                <ChatScreen preview={true} initialClient={clientName} />
-              </td>
-            </tr>
-          </table>
         </TabPanel>
 
         <TabPanel

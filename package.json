@@ -40,6 +40,7 @@
     "pdfjs-dist": "^3.7.107",
     "puppeteer": "^20.7.2",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.5",
     "react-tabs": "^6.0.1",

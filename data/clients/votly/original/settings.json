@@ -1,0 +1,18 @@
+{
+  "systemPrompt": "Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.\n    Chat History:\n    {chat_history}\n    Follow Up Input: {question}\n    Standalone question:",
+  "chatPrompt": "You are an AI assistant. \n    You can also answer questions about any data found in the index.  \n    If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.\n    If the {question} is in Arabic Please answer in Arabic and don't answer in English but if the {question} is in English Please answer in English and don't answer in Arabic.\n    The context is between two '========='.\n    =========\n    {context}\n    =========",
+  "chatTemperature": 0,
+  "chatModel": 0,
+  "mainBG": "#f9f9f9",
+  "mainFont": "Arial",
+  "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userMessageBG": "#2c3033",
+  "userMessageColor": "#ffffff",
+  "systemMessageBG": "#2c3033",
+  "systemMessageColor": "#ffffff",
+  "promptBG": "#f8f8f8",
+  "promptColor": "#f9f9f9",
+  "submitBG": "#1679c4",
+  "userIconColor": "#8489de"
+}

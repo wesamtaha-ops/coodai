@@ -34,7 +34,7 @@ The context is between two '========='.
 Don't recommend content that is not related to the indexed data. and do not recommend more than two content.
 the name and the link and poster should be in the same context.
 You can suggest the content by using the following format [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
-Any recommendation must be atatched with Poster in image tag <a href="link_to_movie or link_to_TV_Show"><img class="poster" height="300" src="" /></a>.
+Any recommendation must be atatched with Poster in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
 If the question is in Arabic Please answer in Arabic. Don't answer in English.  
 don't offer from outside the context. I don't want content from External sources or from the internet.
 don't recommend content that is not related to the provided data if its not in the index say that you don't have it.
@@ -61,10 +61,10 @@ export const makeChain = (
   const docChain = loadQAChain(
     new ChatOpenAI({
       temperature: 0,
-      maxTokens: 2000,
+      maxTokens: 3000,
       maxRetries: 5,
       cache: true,
-      modelName: 'gpt-3.5-turbo-0613', //change this to older versions (e.g. gpt-3.5-turbo) if you don't have access to gpt-4
+      modelName: 'gpt-3.5-turbo', //change this to older versions (e.g. gpt-3.5-turbo) if you don't have access to gpt-4
       streaming: true,
       callbackManager: onTokenStream
         ? CallbackManager.fromHandlers({
@@ -90,4 +90,3 @@ export const makeChain = (
 
   });
 }
-
