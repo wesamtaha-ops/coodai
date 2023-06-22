@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const excludedFiles = ['urls.txt', 'qa.txt', 'style.json'];
+const excludedFiles = ['urls.txt', 'qa.txt', 'settings.json'];
 
 export default function handler(req, res) {
   const { client } = req.query;

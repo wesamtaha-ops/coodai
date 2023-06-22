@@ -18,7 +18,7 @@ export default (req, res) => {
     fs.mkdirSync(clientFolderPath, { recursive: true });
   }
   // Check if styles.json and urls.txt files exist, and create them if they don't exist
-  const requiredFiles = ['style.json', 'urls.txt', 'qa.txt'];
+  const requiredFiles = ['settings.json', 'urls.txt', 'qa.txt'];
   requiredFiles.forEach((file) => {
     const filePath = path.join(clientFolderPath, file);
     if (!fs.existsSync(filePath)) {

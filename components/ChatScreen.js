@@ -36,7 +36,7 @@ export default function ChatScreen({ initialClient, preview }) {
 
     const fetchUrls = async () => {
         try {
-            const response = await axios.get(`/api/urls/${clientName}?file=style.json`);
+            const response = await axios.get(`/api/urls/${clientName}?file=settings.json`);
             setCustomStyle(response.data.data);
             console.log(response.data.data);
         } catch (error) {
