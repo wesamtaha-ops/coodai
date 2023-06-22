@@ -26,3 +26,12 @@ a {
 a:hover {
   opacity: 0.8;
 }
+
+.poster {
+  margin-top: 20px;
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  width: 200px;
+  height: 300px;
+}

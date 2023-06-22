@@ -157,7 +157,7 @@ export default function ChatScreen({ initialClient, preview }) {
             </Head>
             <main className={styles.main} style={{ backgroundColor: customStyle.mainBG || '#f9f9f9', fontFamily: customStyle.mainFont || 'Arial', borderRadius: preview ? 20 : 0, height: preview ? 'auto' : '100vh' }} >
                 <div className={styles.cloud} style={{ width: preview ? '100%' : '85vw', height: preview ? 500 : 'initial' }} >
-                    <div ref={messageListRef} className={styles.messagelist}>
+                    <div ref={messageListRef} className={styles.messagelist} style={{ height: preview ? '100%' : '80vh' }}  >
                         {chatMessages.map((message, index) => {
                             let icon;
                             let className;
@@ -194,7 +194,7 @@ export default function ChatScreen({ initialClient, preview }) {
                                         : styles.usermessage;
                             }
                             return (
-                                <div key={index} className={className} style={{ backgroundColor: customStyle.messageBG }}>
+                                <div key={index} className={className} style={{ backgroundColor: customStyle.messageBG, maxWidth: preview ? '90%' : '80%', fontSize: preview ? '15px' : '16px' }}>
                                     {icon}
                                     <div className={styles.markdownanswer} style={{ backgroundColor: customStyle.messageBG, color: customStyle.messageColor, fontFamily: customStyle.mainFont || 'Arial' }}>
                                         <ReactMarkdown

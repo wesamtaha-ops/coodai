@@ -108,7 +108,7 @@
 
 .messagelist {
     width: 100%;
-    height: 100%;
+    height: 80vh;
     overflow-y: scroll;
     border-radius: 0.5rem;
     font-family: Almarai;
@@ -359,8 +359,20 @@
         width: 100%;
         text-align: center;
     }
+
     .usermessage, .apimessage, .usermessagewaiting {
         max-width: 80% !important;
         width: 80% !important;
     }
+
+   
+}
+
+.markdownanswer img {
+    margin-top: 20px;
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    width: 200px;
+    height: 300px;
 }
