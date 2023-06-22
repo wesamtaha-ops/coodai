@@ -1,64 +1,80 @@
 import path from "path";
-import { HNSWLib } from "langchain/vectorstores";
-import { OpenAIEmbeddings } from "langchain/embeddings";
+import { HNSWLib } from "langchain/vectorstores/hnswlib";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { BufferMemory } from "langchain/memory";
 import { LLMChain, ConversationalRetrievalQAChain, RefineDocumentsChain } from "langchain/chains";
-import { ChatOpenAI } from "langchain/chat_models";
+import { ChatOpenAI } from "langchain/chat_models/openai";
 import { CallbackManager } from "langchain/callbacks";
 import { ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
+import { BufferWindowMemory } from 'langchain/memory';
 
 
-const CONDENSE_PROMPT =
-  PromptTemplate.fromTemplate(`I want you to act as a Movies and TV shows expert you will recommend movies and TV Shows to me. The content you recommend Should be from the index of movies and TV Shows Only. don't recommend content outside the uploaded data. 
-  Topic: Please include the reason for your recommendation in your answer. The reason should be related to the user's request.  don't recommend anything in advance without the user asking for it.
-  Tone: Confident
-  Audience: 30-year old
-  Format: markdown
-The context is between two '========='.
-Don't recommend content that is not related to the indexed data. and do not recommend more than two content.
-the name and the link and poster should be in the same context.
-You can suggest the content by using the following format [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
-Any recommendation must be atatched with Poster in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
-If the question is in Arabic Please answer in Arabic. Don't answer in English.  
-don't offer from outside the context. I don't want content from External sources or from the internet.
-don't recommend content that is not related to the provided data if its not in the index say that you don't have it.
-=========
-{context}
-=========
- Chat History:
-{chat_history}
-Follow Up Input: {question}
-Standalone question:`);
-
-
-const CHAT_PROMPT = ChatPromptTemplate.fromPromptMessages([
-  SystemMessagePromptTemplate.fromTemplate(
-    `Task: 
-    I want you to act as a Coffee your name is WESAMOO expert you will recommend movies and TV Shows to me. The content you recommend Should be from the index of movies and TV Shows Only. don't recommend content outside the uploaded data. 
-    Topic: Please include the reason for your recommendation in your answer. The reason should be related to the user's request.  don't recommend anything in advance without the user asking for it.
-    Tone: Confident
-    Audience: 30-year old
-    Format: markdown
-The context is between two '========='.
-Don't recommend content that is not related to the indexed data. and do not recommend more than two content.
-the name and the link and poster should be in the same context.
-You can suggest the content by using the following format [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
-Any recommendation must be atatched with Poster in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
-If the question is in Arabic Please answer in Arabic. Don't answer in English.  
-don't offer from outside the context. I don't want content from External sources or from the internet.
-don't recommend content that is not related to the provided data if its not in the index say that you don't have it.
-=========
-{context}
-=========` ),
-  HumanMessagePromptTemplate.fromTemplate("{question}"),
-]);
 
 export default async function handler(req: any, res: any) {
   const { question, history, client } = req.body;
 
-  if (!question) {
-    return res.status(400).json({ message: "No question in the request" });
-  }
+  //   if (!question) {
+  //     return res.status(400).json({ message: "No question in the request" });
+  //   }
+
+  //   const originalDir = process.cwd();
+  //   process.chdir(originalDir);
+
+  //   const sanitizedQuestion = question.trim().replace("\n");
+  //   const clientFolder = client;
+  //   const dir = path.resolve(process.cwd(), "data", "clients", clientFolder, "data");
+
+  //   try {
+  //     const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
+  //     const model = new ChatOpenAI({
+  //       temperature: 0,
+  //       maxTokens: 2500,
+  //       maxRetries: 5,
+  //       modelName: 'gpt-3.5-turbo',
+  //       streaming: true,
+  //       callbackManager: CallbackManager.fromHandlers({
+  //         // This function is called when the LLM generates a new token (i.e., a prediction for the next word)
+  //         async handleLLMNewToken(token: string) {
+  //           // Write the token to the output stream (i.e., the console)
+  //           onTokenStream(token);
+  //         },
+  //       }),
+  //     });
+
+
+  //     const systemPrompt = SystemMessagePromptTemplate.fromTemplate(oneLine`
+  //   ${systemPromptTemplate}
+  // `);
+
+
+
+  const systemPromptTemplate = `You are an AI assistant called STCBOT and a world-class Movie and TV Shows Expert.
+You will answer questions, lead the conversation, and recommend content such as movies, series, TV shows, and documentaries to users based on their interests.
+Some chat history is provided as Text don't output this text. Don't preface your answer with "AI:" or "As an AI assistant".
+You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (RELEVANTDOCS) provided by the user.
+When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the RELEVANTDOCS.
+Don’t justify your answers. Don't refer to yourself in any of the created content.
+Don't recommend content that is not related to the RELEVANTDOCS.
+Any recommendation must be atatched with Poster you will find in the RELEVANTDOCS in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
+Answer the input in the same language it was asked in.
+
+Follow Up Input: {input}
+
+RELEVANTDOCS: {context}
+
+CHATHISTORY: {history}
+
+MEMORY: {immediate_history}`;
+
+  const systemPrompt = SystemMessagePromptTemplate.fromTemplate(systemPromptTemplate);
+
+  const chatPrompt = ChatPromptTemplate.fromPromptMessages([
+    systemPrompt,
+    HumanMessagePromptTemplate.fromTemplate('QUESTION: """{input}"""'),
+  ]);
+
+
+  const windowMemory: any = BufferWindowMemory;
 
   const originalDir = process.cwd();
   process.chdir(originalDir);
@@ -67,35 +83,27 @@ export default async function handler(req: any, res: any) {
   const clientFolder = client;
   const dir = path.resolve(process.cwd(), "data", "clients", clientFolder, "data");
 
+
   try {
-    const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
-    const model = new ChatOpenAI({
+    // const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
+    const llm = new ChatOpenAI({
       temperature: 0,
       maxTokens: 2500,
       maxRetries: 5,
       modelName: 'gpt-3.5-turbo',
       streaming: true,
-      callbackManager: onTokenStream
-        ? CallbackManager.fromHandlers({
-          async handleLLMNewToken(token) {
-            onTokenStream(token);
-          },
-        })
-        : undefined,
+      callbackManager: CallbackManager.fromHandlers({
+        // This function is called when the LLM generates a new token (i.e., a prediction for the next word)
+        async handleLLMNewToken(token: string) {
+          // Write the token to the output stream (i.e., the console)
+          onTokenStream(token);
+        },
+      }),
     });
-
-    const retriever = vectorstore.asRetriever();
-    const chain = ConversationalRetrievalQAChain.fromLLM(model, retriever, {
-      questionGeneratorChainOptions: {
-        llm: new ChatOpenAI({
-          modelName: "gpt-3.5-turbo",
-        }),
-        template: `Any recommendation must be atatched with Poster in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.`
-      },
-      qaChainOptions: {
-        type: 'refine'
-      },
-      returnSourceDocuments: true
+    const chain = new LLMChain({
+      prompt: chatPrompt,
+      // memory: windowMemory,
+      llm,
     });
 
     res.writeHead(200, {
@@ -104,9 +112,17 @@ export default async function handler(req: any, res: any) {
       Connection: "keep-alive",
     });
 
+    console.log("chatPrompt", chatPrompt);
+    const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
+    const vectorStoreResult = await vectorStore.similaritySearch(question, 1);
+    console.log("vectorStoreResult", vectorStoreResult);
     await chain.call({
-      question: question, chat_history: history
+      input: question,
+      context: vectorStoreResult,
+      history,
+      immediate_history: windowMemory,
     });
+
 
     await res.write(`data: ${JSON.stringify({ data: "[DONE]" })}\n\n`);
     res.end();
