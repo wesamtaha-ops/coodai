@@ -98,7 +98,8 @@ export default function ChatScreen({ initialClient, preview }) {
             }),
             signal: ctrl.signal,
             onmessage: (event) => {
-                if (event.data === '[DONE]') {
+                console.log(event.data);
+                if (event.data === '{"data":"[DONE]"}') {
                     setMessageState((state) => ({
                         history: [...state.history, [question, state.pending || '']],
                         messages: [

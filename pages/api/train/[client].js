@@ -11,8 +11,8 @@ const { PuppeteerWebBaseLoader } = require("langchain/document_loaders/web/puppe
 
 async function runIngest(clientFolder) {
     const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 2000,
-        chunkOverlap: 400,
+        chunkSize: 500,
+        chunkOverlap: 100,
     });
 
     let allDocs = [];
