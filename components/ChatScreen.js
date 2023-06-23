@@ -51,7 +51,6 @@ export default function ChatScreen({ initialClient, preview }) {
         if (messageList) {
             messageList.scrollTop = messageList.scrollHeight;
         }
-        fetchUrls();
     }, [pending]);
 
     // Focus on text field on load
@@ -59,6 +58,10 @@ export default function ChatScreen({ initialClient, preview }) {
         textAreaRef.current?.focus();
     }, [loading]);
 
+    // Focus on text field on load
+    useEffect(() => {
+        fetchUrls();
+    }, []);
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();

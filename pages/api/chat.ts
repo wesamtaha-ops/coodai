@@ -54,6 +54,7 @@ Some chat history is provided as Text don't output this text. Don't preface your
 You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (RELEVANTDOCS) provided by the user.
 When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the RELEVANTDOCS.
 Don’t justify your answers. Don't refer to yourself in any of the created content.
+You can suggest the content by using the following format [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
 Don't recommend content that is not related to the RELEVANTDOCS.
 Any recommendation must be atatched with Poster you will find in the RELEVANTDOCS in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
 Answer the input in the same language it was asked in.
@@ -62,9 +63,7 @@ Follow Up Input: {input}
 
 RELEVANTDOCS: {context}
 
-CHATHISTORY: {history}
-
-MEMORY: {immediate_history}`;
+`;
 
   const systemPrompt = SystemMessagePromptTemplate.fromTemplate(systemPromptTemplate);
 
@@ -88,7 +87,7 @@ MEMORY: {immediate_history}`;
     // const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
     const llm = new ChatOpenAI({
       temperature: 0,
-      maxTokens: 2500,
+      maxTokens: 3000,
       maxRetries: 5,
       modelName: 'gpt-3.5-turbo',
       streaming: true,
@@ -112,13 +111,11 @@ MEMORY: {immediate_history}`;
       Connection: "keep-alive",
     });
 
-    console.log("chatPrompt", chatPrompt);
     const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
     const vectorStoreResult = await vectorStore.similaritySearch(question, 1);
-    console.log("vectorStoreResult", vectorStoreResult);
     await chain.call({
       input: question,
-      context: vectorStoreResult,
+      context: JSON.stringify(vectorStoreResult),
       history,
       immediate_history: windowMemory,
     });
