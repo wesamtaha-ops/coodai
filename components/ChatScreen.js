@@ -34,6 +34,13 @@ export default function ChatScreen({ initialClient, preview }) {
     const [error, setError] = useState('');
     const [clientName, setClientName] = useState(initialClient);
 
+
+    // // Example usage
+    // const chatHistoryJSON = '[{"message": "Hello"}, {"message": "How are you?"}, {"message": "I\'m good, thanks!"}]';
+    // const updatedChatHistoryJSON = maintainChatHistory(chatHistoryJSON, 2);
+    // console.log(updatedChatHistoryJSON);
+
+
     const fetchUrls = async () => {
         try {
             const response = await axios.get(`/api/urls/${clientName}?file=settings.json`);
@@ -86,6 +93,7 @@ export default function ChatScreen({ initialClient, preview }) {
         setLoading(true);
         setUserInput('');
         setMessageState((state) => ({ ...state, pending: '' }));
+        
 
         const ctrl = new AbortController();
 
@@ -103,6 +111,9 @@ export default function ChatScreen({ initialClient, preview }) {
             onmessage: (event) => {
                 console.log(event.data);
                 if (event.data === '{"data":"[DONE]"}') {
+
+                    // 
+
                     setMessageState((state) => ({
                         history: [...state.history, [question, state.pending || '']],
                         messages: [

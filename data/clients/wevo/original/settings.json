@@ -3,7 +3,7 @@
   "chatPrompt": "You are an AI assistant. \n    You can also answer questions about any data found in the index.  \n    If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.\n    If the {question} is in Arabic Please answer in Arabic and don't answer in English but if the {question} is in English Please answer in English and don't answer in Arabic.\n    The context is between two '========='.\n    =========\n    {context}\n    =========",
   "chatTemperature": 0,
   "chatModel": "gpt-3.5-turbo",
-  "mainBG": "#f5a623",
+  "mainBG": "#3b2c55",
   "mainFont": "Almarai",
   "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
   "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
@@ -11,8 +11,8 @@
   "userMessageColor": "#ffd7d7",
   "systemMessageBG": "#062439",
   "systemMessageColor": "#4b4444",
-  "promptBG": "#7ed321",
-  "promptColor": "#f5a623",
+  "promptBG": "#775680",
+  "promptColor": "#622451",
   "submitBG": "#9013fe",
   "userIconColor": "#8b572a"
 }

@@ -13,56 +13,44 @@ import { BufferWindowMemory } from 'langchain/memory';
 export default async function handler(req: any, res: any) {
   const { question, history, client } = req.body;
 
-  //   if (!question) {
-  //     return res.status(400).json({ message: "No question in the request" });
-  //   }
 
-  //   const originalDir = process.cwd();
-  //   process.chdir(originalDir);
+  const maintainChatHistory = (chatHistory: any, conversationLimit: any) => {
+    // Parse the JSON object into a JavaScript array
+    let chatHistoryArray = chatHistory;//JSON.parse(chatHistory);
 
-  //   const sanitizedQuestion = question.trim().replace("\n");
-  //   const clientFolder = client;
-  //   const dir = path.resolve(process.cwd(), "data", "clients", clientFolder, "data");
+    // Calculate the number of conversations to remove
+    const conversationCount = chatHistoryArray.length;
+    const conversationsToRemove = Math.max(0, conversationCount - conversationLimit);
 
-  //   try {
-  //     const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
-  //     const model = new ChatOpenAI({
-  //       temperature: 0,
-  //       maxTokens: 2500,
-  //       maxRetries: 5,
-  //       modelName: 'gpt-3.5-turbo',
-  //       streaming: true,
-  //       callbackManager: CallbackManager.fromHandlers({
-  //         // This function is called when the LLM generates a new token (i.e., a prediction for the next word)
-  //         async handleLLMNewToken(token: string) {
-  //           // Write the token to the output stream (i.e., the console)
-  //           onTokenStream(token);
-  //         },
-  //       }),
-  //     });
+    // Remove the old conversations
+    if (conversationsToRemove > 0) {
+      chatHistoryArray.splice(0, conversationsToRemove);
+    }
+    // Convert the JavaScript array back to a JSON string
+    return chatHistoryArray;
+  }
 
-
-  //     const systemPrompt = SystemMessagePromptTemplate.fromTemplate(oneLine`
-  //   ${systemPromptTemplate}
-  // `);
-
-
+  const maintainedChatHistory = maintainChatHistory(history, 2);
+  console.log(maintainedChatHistory);
 
   const systemPromptTemplate = `You are an AI assistant called STCBOT and a world-class Movie and TV Shows Expert.
 You will answer questions, lead the conversation, and recommend content such as movies, series, TV shows, and documentaries to users based on their interests.
 Some chat history is provided as Text don't output this text. Don't preface your answer with "AI:" or "As an AI assistant".
-You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (RELEVANTDOCS) provided by the user.
-When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the RELEVANTDOCS.
+You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARAY) provided by the user.
+When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the LIBRARAY.
 Don’t justify your answers. Don't refer to yourself in any of the created content.
-You can suggest the content by using the following format [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
-Don't recommend content that is not related to the RELEVANTDOCS.
-Any recommendation must be atatched with Poster you will find in the RELEVANTDOCS in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
+You can suggest the content by using the following format  story and  [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
+Only recommend movies and TV SHOWS  that is available on (LIBRARAY) if you can't find any content on context (LIBRARAY) say I did not found any content.
+Any recommendation must be atatched with Poster you will find in the LIBRARAY in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
+alwayes use the same format for recommendation. alwayes give the link and the poster to the content.
+only recommend content that is available on LIBRARAY if you don't have any content to recommend say I did not found any content.
 Answer the input in the same language it was asked in.
 
 Follow Up Input: {input}
 
-RELEVANTDOCS: {context}
+LIBRARAY: {context}
 
+CHATHISTORY: {history}
 `;
 
   const systemPrompt = SystemMessagePromptTemplate.fromTemplate(systemPromptTemplate);
@@ -87,9 +75,9 @@ RELEVANTDOCS: {context}
     // const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
     const llm = new ChatOpenAI({
       temperature: 0,
-      maxTokens: 3000,
+      maxTokens: 10000,
       maxRetries: 5,
-      modelName: 'gpt-3.5-turbo',
+      modelName: 'gpt-3.5-turbo-16k-0613',
       streaming: true,
       callbackManager: CallbackManager.fromHandlers({
         // This function is called when the LLM generates a new token (i.e., a prediction for the next word)
@@ -116,7 +104,7 @@ RELEVANTDOCS: {context}
     await chain.call({
       input: question,
       context: JSON.stringify(vectorStoreResult),
-      history,
+      history: JSON.stringify(maintainedChatHistory),
       immediate_history: windowMemory,
     });
 
