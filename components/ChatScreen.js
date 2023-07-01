@@ -19,7 +19,7 @@ export default function ChatScreen({ initialClient, preview }) {
                 message:
                     client === 'quran'
                         ? 'السلام عليكم .. أنا مساعدك الشخصي في الأمور الدينية الحياتية العامة يمكنك سؤالي عن أي شيء يتعلق في تفسير القرآن والحديث الشريف فقد تم تدريبي على التفسير وعلى صحيح البخاري ومسلم .. يرجى العلم أنني لست مؤهلا للفتوى ولست مرجع ديني فأنا فقط معالج لغوي أعطيك المعلومة بشكل مبسط'
-                        : "Hi, I'm " + client + " AI assistant for Your Data. How can I help you?",
+                        : "Hi, I'm <b style='color: blueviolet;' >" + client.toUpperCase() + " AI </b> I am here to assist you with any questions or recommendations for Movies, TV shows, Or Documentaries. <br /> How can I help you today?",
                 type: 'apiMessage',
             },
         ],
@@ -93,7 +93,7 @@ export default function ChatScreen({ initialClient, preview }) {
         setLoading(true);
         setUserInput('');
         setMessageState((state) => ({ ...state, pending: '' }));
-        
+
 
         const ctrl = new AbortController();
 
