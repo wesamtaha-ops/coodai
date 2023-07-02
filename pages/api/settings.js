@@ -2,20 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 const defaultSettings = {
-    systemPrompt: `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
-    Chat History:
-    {chat_history}
-    Follow Up Input: {question}
-    Standalone question:`,
-    chatPrompt: `You are an AI assistant. 
-    You can also answer questions about any data found in the index.  
-    If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.
-    If the {question} is in Arabic Please answer in Arabic and don't answer in English but if the {question} is in English Please answer in English and don't answer in Arabic.
-    The context is between two '========='.
-    =========
-    {context}
-    =========`,
+    systemPrompt: `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.`,
     chatTemperature: 0,
+    allowChatHistory: 0,
     chatModel: 0,
     mainBG: '#f9f9f9',
     mainFont: 'Arial',

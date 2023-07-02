@@ -16,10 +16,7 @@ export default function ChatScreen({ initialClient, preview }) {
     const [messageState, setMessageState] = useState({
         messages: [
             {
-                message:
-                    client === 'quran'
-                        ? 'السلام عليكم .. أنا مساعدك الشخصي في الأمور الدينية الحياتية العامة يمكنك سؤالي عن أي شيء يتعلق في تفسير القرآن والحديث الشريف فقد تم تدريبي على التفسير وعلى صحيح البخاري ومسلم .. يرجى العلم أنني لست مؤهلا للفتوى ولست مرجع ديني فأنا فقط معالج لغوي أعطيك المعلومة بشكل مبسط'
-                        : "Hi, I'm <b style='color: blueviolet;' >" + client.toUpperCase() + " AI </b> I am here to assist you with any questions or recommendations for Movies, TV shows, Or Documentaries. <br /> How can I help you today?",
+                message: "Hi, I'm <b style='color: blueviolet;' >" + client.toUpperCase() + " AI </b> I am here to assist you with any questions or recommendations. <br /> How can I help you today?",
                 type: 'apiMessage',
             },
         ],
@@ -30,21 +27,15 @@ export default function ChatScreen({ initialClient, preview }) {
 
     const messageListRef = useRef(null);
     const textAreaRef = useRef(null);
-    const [customStyle, setCustomStyle] = useState([]);
+    const [settings, setSettings] = useState([]);
     const [error, setError] = useState('');
     const [clientName, setClientName] = useState(initialClient);
-
-
-    // // Example usage
-    // const chatHistoryJSON = '[{"message": "Hello"}, {"message": "How are you?"}, {"message": "I\'m good, thanks!"}]';
-    // const updatedChatHistoryJSON = maintainChatHistory(chatHistoryJSON, 2);
-    // console.log(updatedChatHistoryJSON);
 
 
     const fetchUrls = async () => {
         try {
             const response = await axios.get(`/api/urls/${clientName}?file=settings.json`);
-            setCustomStyle(response.data.data);
+            setSettings(response.data.data);
             console.log(response.data.data);
         } catch (error) {
             console.error(error);
@@ -106,6 +97,7 @@ export default function ChatScreen({ initialClient, preview }) {
                 question,
                 history,
                 client,
+                settings
             }),
             signal: ctrl.signal,
             onmessage: (event) => {
@@ -170,7 +162,7 @@ export default function ChatScreen({ initialClient, preview }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className={styles.main} style={{ backgroundColor: customStyle.mainBG || '#f9f9f9', fontFamily: customStyle.mainFont || 'Arial', borderRadius: preview ? 20 : 0, height: preview ? 'auto' : '100vh' }} >
+            <main className={styles.main} style={{ backgroundColor: settings.mainBG || '#f9f9f9', fontFamily: settings.mainFont || 'Arial', borderRadius: preview ? 20 : 0, height: preview ? 'auto' : '100vh' }} >
                 <div className={styles.cloud} style={{ width: preview ? '100%' : '85vw', height: preview ? 500 : 'initial' }} >
                     <div ref={messageListRef} className={styles.messagelist} style={{ height: preview ? '100%' : '80vh' }}  >
                         {chatMessages.map((message, index) => {
@@ -180,7 +172,7 @@ export default function ChatScreen({ initialClient, preview }) {
                             if (message.type === 'apiMessage') {
                                 icon = (
                                     <Image
-                                        src={customStyle.chatIcon || "/chatIcon.png"}
+                                        src={settings.chatIcon || "/chatIcon.png"}
                                         alt="AI"
                                         width="30"
                                         height="30"
@@ -189,15 +181,16 @@ export default function ChatScreen({ initialClient, preview }) {
                                     />
                                 );
                                 className = styles.apimessage;
+
                             } else {
                                 icon = (
                                     <Image
-                                        src={customStyle.userIcon || "https://cdn.jawwy.tv/9/avatar-smile.svg"}
+                                        src={settings.userIcon || "https://cdn.jawwy.tv/9/avatar-smile.svg"}
                                         alt="Me"
                                         width="35"
                                         height="35"
                                         className={styles.usericon}
-                                        style={{ backgroundColor: customStyle.userIconColor || '#f9f9f9' }}
+                                        style={{ backgroundColor: settings.userIconColor || '#f9f9f9' }}
                                         priority
                                     />
                                 );
@@ -209,9 +202,20 @@ export default function ChatScreen({ initialClient, preview }) {
                                         : styles.usermessage;
                             }
                             return (
-                                <div key={index} className={className} style={{ backgroundColor: customStyle.messageBG, maxWidth: preview ? '90%' : '80%', fontSize: preview ? '15px' : '16px' }}>
+                                <div
+
+
+                                    key={index} className={className} style={{
+                                        color: message.type !== 'apiMessage' ? settings.userMessageColor : settings.systemMessageColor,
+                                        backgroundColor: message.type !== 'apiMessage' ? settings.userMessageBG : settings.systemMessageBG,
+                                        maxWidth: preview ? '90%' : '80%', fontSize: preview ? '15px' : '16px'
+                                    }}>
                                     {icon}
-                                    <div className={styles.markdownanswer} style={{ backgroundColor: customStyle.messageBG, color: customStyle.messageColor, fontFamily: customStyle.mainFont || 'Arial' }}>
+                                    <div className={styles.markdownanswer} style={{
+                                        color: message.type !== 'apiMessage' ? settings.userMessageColor : settings.systemMessageColor,
+                                        backgroundColor: message.type !== 'apiMessage' ? settings.userMessageBG : settings.systemMessageBG,
+                                        fontFamily: settings.mainFont || 'Arial'
+                                    }}>
                                         <ReactMarkdown
                                             remarkPlugins={[remarkGfm]}
                                             linkTarget="_blank"
@@ -242,12 +246,12 @@ export default function ChatScreen({ initialClient, preview }) {
                                 value={userInput}
                                 onChange={(e) => setUserInput(e.target.value)}
                                 className={styles.textarea}
-                                style={{ backgroundColor: customStyle.promptBG || '#F1F1F1', color: customStyle.promptColor || '#000000', fontFamily: customStyle.mainFont || 'Arial', width: preview ? '100%' : 'calc(100vw - 100px)' }}
+                                style={{ backgroundColor: settings.promptBG || '#F1F1F1', color: settings.promptColor || '#000000', fontFamily: settings.mainFont || 'Arial', width: preview ? '100%' : 'calc(100vw - 100px)' }}
                             />
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className={styles.generatebutton} style={{ backgroundColor: customStyle.submitBG || '#0084FF' }}
+                                className={styles.generatebutton} style={{ backgroundColor: settings.submitBG || '#0084FF' }}
                             >
                                 {loading ? (
                                     <div className={styles.loadingwheel}>

@@ -1,6 +1,11 @@
 .settingsForm {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 ;
+  margin-top: 0px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 10px 30px -5px rgba(47, 43, 43, 0.1);
+  border-radius: 10px;
 }
 
 .settingsForm label {
@@ -82,3 +87,7 @@
   bottom: 0;
   left: 0;
 }
+
+.innerLable { min-width: 150px; line-height: 25px;  font-size: 15px;}
+.outLable { border-bottom: 1px #dddddd solid; padding-bottom: 20px;}
+
