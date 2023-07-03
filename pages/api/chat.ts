@@ -29,39 +29,39 @@ export default async function handler(req: any, res: any) {
     return chatHistoryArray;
   }
 
-  const maintainedChatHistory = maintainChatHistory(history,settings.allowChatHistory == '1' ? 2 : 0);
+  const maintainedChatHistory = maintainChatHistory(history, settings.allowChatHistory == '1' ? 2 : 0);
 
-  const systemPromptTemplate =  settings.systemPrompt + `
+  const systemPromptTemplate = settings.systemPrompt + `
   Some chat history is provided as Text don't output this text. Don't preface your answer with "AI:" or "As an AI assistant".
   Don’t justify your answers. Don't refer to yourself in any of the created content.
-  only recommend content that is available on LIBRARAY if you don't have any content to recommend say I did not found any content.
+  only recommend content that is available on LIBRARY if you don't have any content to recommend say I did not found any content.
   Answer the input in the same language it was asked in.
-  You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARAY) provided by the user. 
-  When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the LIBRARAY.
+  You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARY) provided by the user. 
+  When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the LIBRARY.
   Follow Up Input: {input}
-  LIBRARAY: {context}
+  LIBRARY: {context}
   CHATHISTORY: 
   {history}`;
 
-// const systemPromptTemplate = `You are an AI assistant called المحامي الذكي and a UAE Lawyers Expert.
-// You will answer questions, lead the conversation, and help the user with law based on list of laws that you have.
-// and also you will write notes for the courts. 
-// Some chat history is provided as Text don't output this text. Don't preface your answer with "AI:" or "As an AI assistant".
-// You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARAY) provided by the user.
-// When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the LIBRARAY.
-// Don’t justify your answers. Don't refer to yourself in any of the created content.
-// You can suggest the content by using the following format  story and  [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
-// Only recommend movies and TV SHOWS  that is available on (LIBRARAY) if you can't find any content on context (LIBRARAY) say I did not found any content.
-// Any recommendation must be atatched with Poster you will find in the LIBRARAY in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
-// alwayes use the same format for recommendation. alwayes give the link and the poster to the content.
-// only recommend content that is available on LIBRARAY if you don't have any content to recommend say I did not found any content.
-// Answer the input in the same language it was asked in.
+  // const systemPromptTemplate = `You are an AI assistant called المحامي الذكي and a UAE Lawyers Expert.
+  // You will answer questions, lead the conversation, and help the user with law based on list of laws that you have.
+  // and also you will write notes for the courts. 
+  // Some chat history is provided as Text don't output this text. Don't preface your answer with "AI:" or "As an AI assistant".
+  // You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARAY) provided by the user.
+  // When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the LIBRARAY.
+  // Don’t justify your answers. Don't refer to yourself in any of the created content.
+  // You can suggest the content by using the following format  story and  [movie_name](link_to_movie) or [TV_Show_name](link_to_TV_Show)
+  // Only recommend movies and TV SHOWS  that is available on (LIBRARAY) if you can't find any content on context (LIBRARAY) say I did not found any content.
+  // Any recommendation must be atatched with Poster you will find in the LIBRARAY in image tag <a href="link_to_movie or link_to_TV_Show"><img width="200" style="margin-top:20px; display:block; margin-bottom:10px; border-radius: 10px" height="300" src="" /></a>.
+  // alwayes use the same format for recommendation. alwayes give the link and the poster to the content.
+  // only recommend content that is available on LIBRARAY if you don't have any content to recommend say I did not found any content.
+  // Answer the input in the same language it was asked in.
 
-// Follow Up Input: {input}
+  // Follow Up Input: {input}
 
-// LIBRARAY: {context}
+  // LIBRARAY: {context}
 
-// `;
+  // `;
 
 
 
