@@ -1,7 +1,6 @@
 {
   "functions": {
-    "pages/api/chat.js": {
-      "includeFiles": "data/**",
+    "api/chat.ts": {
       "maxDuration": 10
     }
   }

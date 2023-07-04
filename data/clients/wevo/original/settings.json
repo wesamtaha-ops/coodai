@@ -1,0 +1,19 @@
+{
+  "systemPrompt": "You are an AI Assistant \nYour name is WEVO AI and you will answer about everything related to Wevo Application and help user about purchasing Rooms and Names and suggest packages to him. You can act as Sales man. ",
+  "chatPrompt": "You are an AI assistant. \n    You can also answer questions about any data found in the index.  \n    If the context is empty or you don't know the answer, just tell them that you didn't find anything regarding that topic. Don't try to make up an answer.\n    If the {question} is in Arabic Please answer in Arabic and don't answer in English but if the {question} is in English Please answer in English and don't answer in Arabic.\n    The context is between two '========='.\n    =========\n    {context}\n    =========",
+  "chatTemperature": 0,
+  "chatModel": "gpt-3.5-turbo-16k-0613",
+  "mainBG": "#ffffff",
+  "mainFont": "Almarai",
+  "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userMessageBG": "#cbe3cb",
+  "userMessageColor": "#000000",
+  "systemMessageBG": "#f7f7f7",
+  "systemMessageColor": "#000000",
+  "promptBG": "#f1f1f1",
+  "promptColor": "#4a90e2",
+  "submitBG": "#4a90e2",
+  "userIconColor": "#ffffff",
+  "allowChatHistory": "1"
+}

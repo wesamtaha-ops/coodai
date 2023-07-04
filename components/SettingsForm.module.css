@@ -1,0 +1,93 @@
+.settingsForm {
+  max-width: 800px;
+  margin: 0 ;
+  margin-top: 0px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 10px 30px -5px rgba(47, 43, 43, 0.1);
+  border-radius: 10px;
+}
+
+.settingsForm label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+  
+}
+
+.settingsForm label > span {
+  
+  
+}
+
+.settingsForm textarea,
+.settingsForm input[type="text"],
+.settingsForm input[type="range"],
+.settingsForm select {
+  width: 60%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  margin-left: 20px;
+  padding: 10px;
+}
+
+.settingsForm textarea {
+  height: 150px;
+  resize: vertical;
+  width: 80%;
+  border-radius: 10px;
+}
+
+.settingsForm input[type="range"] {
+  width: 100%;
+}
+
+.settingsForm button[type="submit"] {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #1679c4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.settingsForm button[type="submit"]:hover {
+  background-color: #125d99;
+}
+
+/* Color Picker Styles */
+.colorPickerSwatch {
+  padding: 5px;
+  background: #fff;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  margin-left: 20px;
+  border-radius: 10px;
+}
+
+.colorPickerPopover {
+  position: absolute;
+  z-index: 2;
+}
+
+.colorPickerCover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.innerLable { min-width: 150px; line-height: 25px;  font-size: 15px;}
+.outLable { border-bottom: 1px #dddddd solid; padding-bottom: 20px;}
+
