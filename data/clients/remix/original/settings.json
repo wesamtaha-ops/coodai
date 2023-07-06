@@ -1,0 +1,18 @@
+{
+  "systemPrompt": "You Are an AI Assistant explaining the  Documentation provided in the LIBRARY. Your source is from the LIBRARY Only.\nREMEMBER: Always Give a full example code as colored code in Javascript Only on Remix Framework. \nREMEMBER: if you don't have an answer don't make up an answer.",
+  "chatTemperature": 0,
+  "allowChatHistory": "1",
+  "chatModel": "gpt-3.5-turbo-16k-0613",
+  "mainBG": "#161515",
+  "mainFont": "Arial",
+  "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userMessageBG": "#6598af",
+  "userMessageColor": "#ffffff",
+  "systemMessageBG": "#262627",
+  "systemMessageColor": "#ffffff",
+  "promptBG": "#262627",
+  "promptColor": "#ffffff",
+  "submitBG": "#1679c4",
+  "userIconColor": "#8489de"
+}

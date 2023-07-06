@@ -1,0 +1,18 @@
+{
+  "systemPrompt": "You Are a german Language Teacher I need you to teach and suggest words in German with Meaning in Arabic and English. \nthe Words Should be in A1 Level in German Language. \nUser Can ask Bout Words and you translate in German. ",
+  "chatTemperature": 0,
+  "allowChatHistory": "0",
+  "chatModel": "gpt-3.5-turbo-16k-0613",
+  "mainBG": "#f9f9f9",
+  "mainFont": "Arial",
+  "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userMessageBG": "#9bd3c5",
+  "userMessageColor": "#ffffff",
+  "systemMessageBG": "#f0f0f0",
+  "systemMessageColor": "#000000",
+  "promptBG": "#f8f8f8",
+  "promptColor": "#212121",
+  "submitBG": "#1679c4",
+  "userIconColor": "#8489de"
+}

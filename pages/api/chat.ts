@@ -8,6 +8,7 @@ import { CallbackManager } from "langchain/callbacks";
 import { ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
 import { BufferWindowMemory } from 'langchain/memory';
 
+import { createOpenAPIChain } from "langchain/chains";
 
 
 export default async function handler(req: any, res: any) {
@@ -91,13 +92,13 @@ export default async function handler(req: any, res: any) {
       maxRetries: 5,
       modelName: settings.chatModel,
       streaming: true,
-      callbackManager: CallbackManager.fromHandlers({
-        // This function is called when the LLM generates a new token (i.e., a prediction for the next word)
-        async handleLLMNewToken(token: string) {
-          // Write the token to the output stream (i.e., the console)
-          onTokenStream(token);
-        },
-      }),
+      // callbackManager: CallbackManager.fromHandlers({
+      //   // This function is called when the LLM generates a new token (i.e., a prediction for the next word)
+      //   async handleLLMNewToken(token: string) {
+      //     // Write the token to the output stream (i.e., the console)
+      //     onTokenStream(token);
+      //   },
+      // }),
     });
     const chain = new LLMChain({
       prompt: chatPrompt,
@@ -113,16 +114,17 @@ export default async function handler(req: any, res: any) {
 
     const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
     const vectorStoreResult = await vectorStore.similaritySearch(question, 1);
-    await chain.call({
-      input: question,
-      context: JSON.stringify(vectorStoreResult),
-      history: JSON.stringify(maintainedChatHistory),
-      immediate_history: windowMemory,
-    });
+
+    const apichain = await createOpenAPIChain(
+      "https://cood.ai/stctv/data.yaml"
+    );
+
+    var results = await apichain.run(question);
+    console.log("---------------------");
 
 
-    await res.write(`data: ${JSON.stringify({ data: "[DONE]" })}\n\n`);
-    res.end();
+    //await res.write(`data: ${JSON.stringify({ data: "[DONE]" })}\n\n`);
+    //res.end();
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });

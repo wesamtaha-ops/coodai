@@ -1,0 +1,18 @@
+{
+  "systemPrompt": "Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.",
+  "chatTemperature": 0,
+  "allowChatHistory": "1",
+  "chatModel": "gpt-3.5-turbo-16k-0613",
+  "mainBG": "#2c3033",
+  "mainFont": "Arial",
+  "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
+  "userMessageBG": "#2c3033",
+  "userMessageColor": "#ffffff",
+  "systemMessageBG": "#2c3033",
+  "systemMessageColor": "#ffffff",
+  "promptBG": "#f8f8f8",
+  "promptColor": "#7b2929",
+  "submitBG": "#1679c4",
+  "userIconColor": "#8489de"
+}
