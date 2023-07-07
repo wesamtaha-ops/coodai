@@ -36,7 +36,7 @@ const FileUploadForm = ({ directoryEmpty, setDirectoryEmpty, clientName }) => {
   const onFileChange = (event) => {
     const filesArray = Array.from(event.target.files);
 
-    const allowedExtensions = ['pdf', 'docx', 'doc', 'csv', 'txt'];
+    const allowedExtensions = ['pdf', 'docx', 'doc', 'csv', 'txt', 'json'];
 
     const filteredFiles = filesArray.filter((file) => {
       const fileExtension = file.name.split('.').pop().toLowerCase();

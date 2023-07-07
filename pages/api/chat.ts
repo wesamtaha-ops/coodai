@@ -112,7 +112,7 @@ export default async function handler(req: any, res: any) {
     });
 
     const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
-    const vectorStoreResult = await vectorStore.similaritySearch(question, 1);
+    const vectorStoreResult = await vectorStore.similaritySearchWithScore(question, 2);
     await chain.call({
       input: question,
       context: JSON.stringify(vectorStoreResult),

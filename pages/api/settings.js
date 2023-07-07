@@ -2,23 +2,23 @@ import fs from 'fs';
 import path from 'path';
 
 const defaultSettings = {
-    systemPrompt: `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.`,
-    chatTemperature: 0,
-    allowChatHistory: 0,
-    chatModel: 0,
-    mainBG: '#f9f9f9',
-    mainFont: 'Arial',
-    chatIcon: 'https://cdn.jawwy.tv/9/avatar-smile.svg',
-    userIcon: 'https://cdn.jawwy.tv/9/avatar-smile.svg',
-    userMessageBG: '#2c3033',
-    userMessageColor: '#ffffff',
-    systemMessageBG: '#2c3033',
-    systemMessageColor: '#ffffff',
-    promptBG: '#f8f8f8',
-    promptColor: '#f9f9f9',
-    submitBG: '#1679c4',
-    userIconColor: '#8489de',
-    // Add other default settings here
+  systemPrompt: `I want you to act as a document that I am having a conversation with. Your name is "AI Assistant". You will provide me with answers from the given info. If the answer is not included, say exactly "Hmm, I am not sure." and stop after that. Refuse to answer any question not about the info. Never break character.`,
+  chatTemperature: 0,
+  allowChatHistory: 0,
+  chatModel: 'gpt-3.5-turbo',
+  mainBG: '#ffffff',
+  mainFont: 'Almarai',
+  chatIcon: 'https://cood.ai/bot/avatar-smile.svg',
+  userIcon: 'https://cood.ai/bot/avatar-smile.svg',
+  userMessageBG: '#3b81f6',
+  userMessageColor: '#ffffff',
+  systemMessageBG: '#f1f1f0',
+  systemMessageColor: '#000000',
+  promptBG: '#f8f8f8',
+  promptColor: '#000000',
+  submitBG: '#1679c4',
+  userIconColor: '#8489de',
+  // Add other default settings here
 };
 
 

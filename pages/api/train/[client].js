@@ -8,6 +8,8 @@ const { CSVLoader } = require("langchain/document_loaders/fs/csv");
 const { DocxLoader } = require("langchain/document_loaders/fs/docx");
 const { TextLoader } = require("langchain/document_loaders/fs/text");
 const { PuppeteerWebBaseLoader } = require("langchain/document_loaders/web/puppeteer");
+const { JSONLoader } = require("langchain/document_loaders/fs/json");
+
 
 async function runIngest(clientFolder) {
     const textSplitter = new RecursiveCharacterTextSplitter({
@@ -50,13 +52,11 @@ async function runIngest(clientFolder) {
         const filePath = path.join(storeFolderPath, fileName);
         const ext = path.extname(filePath);
         let rawDocs;
+        // Handle txt files
 
         // Handle txt files
-        if (ext === '.txt' || ext === '.json') {
+        if (ext === '.txt') {
             if (fileName === 'urls.txt') continue;
-            if (fileName === 'settings.json') continue; // Exclude urls.txt from ingestion
-            // const fileContent = fs.readFileSync(filePath, 'utf8');
-            // if (fileContent.trim() === '' || fileName === 'qa.txt') continue; // Skip empty txt files and qa.txt
             const loader = new TextLoader(filePath);
             rawDocs = await loader.load();
             console.log(rawDocs);
@@ -72,6 +72,11 @@ async function runIngest(clientFolder) {
         } else if (ext === '.docx') {
             const loader = new DocxLoader(filePath);
             rawDocs = await loader.load();
+        } else if (ext === '.json') {
+            if (fileName === 'settings.json') continue; // Exclude urls.txt from ingestion
+            const loader = new JSONLoader(filePath);
+            rawDocs = await loader.load();
+            console.log(rawDocs);
         } else {
             console.log(`Unsupported file type: ${ext}`);
             continue;
