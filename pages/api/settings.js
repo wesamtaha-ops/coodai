@@ -25,8 +25,9 @@ const defaultSettings = {
 export default function handler(req, res) {
   if (req.method === 'GET') {
     const { clientFolder } = req.query;
+    const { botName } = req.query;
     const dataPath = process.env.dataPath;
-    const clientFolderPath = path.resolve(dataPath, clientFolder, 'original');
+    const clientFolderPath = path.resolve(dataPath, clientFolder, botName, 'original');
     const settingsFilePath = path.join(clientFolderPath, 'settings.json');
 
     fs.readFile(settingsFilePath, 'utf8', (err, data) => {
@@ -51,8 +52,9 @@ export default function handler(req, res) {
     });
   } else if (req.method === 'POST') {
     const { clientFolder } = req.query;
+    const { botName } = req.query;
     const dataPath = process.env.dataPath;
-    const clientFolderPath = path.resolve(dataPath, clientFolder, 'original');
+    const clientFolderPath = path.resolve(dataPath, clientFolder, botName, 'original');
 
     const formData = req.body;
 

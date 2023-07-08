@@ -12,17 +12,17 @@ export const config = {
 export default (req, res) => {
   if (req.method === 'POST') {
     const form = new IncomingForm();
+    const botFolder = req.query.bot;
     const clientFolder = req.query.client;
 
-    if (!clientFolder) {
+    if (!botFolder) {
       throw new Error('Client name is required in the URL');
     }
 
-    console.log('Client folder', clientFolder);
 
     const dataPath = process.env.dataPath;
     
-    form.uploadDir = path.resolve(dataPath + clientFolder + '/original/');
+    form.uploadDir = path.resolve(dataPath + clientFolder + '/' + botFolder + '/original/');
     fs.mkdirSync(form.uploadDir, { recursive: true });
 
 

@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
 * {
@@ -11,16 +16,41 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  background-color: #f1f5f9;
+}
+
+#__next {
+  background-color: #f1f5f9;
+}
+
+.w-40 {
+  width: 45%;
+  background-color: #ffffff;
+  flex: 1;
+  display: inline-block;
+  margin-right: 24px;
+  box-shadow: 0 0 30.7407px 4.39152px rgba(0, 0, 0, .07);
+  text-align: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.w-40 h3 {
+  font-size: 20px;
+  padding: 20px;
+  padding-top: 0;
 }
 
 body {
   color: snow;
-  background: #f2f3f5;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+  color: #000;
+  text-decoration: none !important;
+
 }
 
 a:hover {
@@ -34,4 +64,63 @@ a:hover {
   border-radius: 10px;
   width: 200px;
   height: 300px;
+}
+
+
+.card-text {
+  padding: 0px;
+  line-height: 28px;
+  margin-bottom: -20px;
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.card-text ul li {
+  font-size: 16px;
+  line-height: 33px;
+}
+
+.card-text h2 {
+  border-bottom: 2px #000 solid;
+  display: inline;
+  margin-bottom: 0px;
+  margin-left: 20px;
+  font-size: 24px;
+}
+
+.crd h4 {
+  border-bottom: 0px #999999 solid;
+  display: inline;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+.card {
+  box-shadow: 0 0 30.7407px 4.39152px rgba(0, 0, 0, .07);
+  border: 0px  !important;
+  border: 20px !important;
+}
+
+.card-header {
+  border: 0px !important;
+  color: #333333 !important;
+  font-weight: bold;
+}
+
+.progress, .progress-stacked {
+  height: 33px !important;
+  border-radius: 30px;
+  margin-top: 2px;
+  margin-bottom: 0px;
+}
+
+.progress-bar {
+  background-color: #2196F3 !important;
+  padding-left: 12px;
+}
+
+.progressCard .card-text {
+  margin: 0px !important;
+  padding: 0 !important;
+  padding-left: 0px !important;
 }

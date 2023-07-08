@@ -11,7 +11,7 @@ const { PuppeteerWebBaseLoader } = require("langchain/document_loaders/web/puppe
 const { JSONLoader } = require("langchain/document_loaders/fs/json");
 
 
-async function runIngest(clientFolder) {
+async function runIngest(clientFolder, botFolder) {
     const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000,
         chunkOverlap: 200,
@@ -22,8 +22,8 @@ async function runIngest(clientFolder) {
     process.chdir(originalDir);
 
     const dataPath = process.env.dataPath;
-    const storeFolderPath = path.resolve(dataPath + clientFolder + '/original/');
-    const clientFolderPath = path.resolve(dataPath + clientFolder);
+    const storeFolderPath = path.resolve(dataPath + clientFolder + "/" + botFolder + '/original/');
+    const botFolderPath = path.resolve(dataPath + clientFolder + "/" + botFolder);
 
     const fileNames = fs.readdirSync(storeFolderPath);
 
@@ -93,8 +93,8 @@ async function runIngest(clientFolder) {
     originalDir = process.cwd();
     console.log("Creating vector store...");
     const vectorStore = await HNSWLib.fromDocuments(allDocs, new OpenAIEmbeddings());
-    fs.mkdirSync(clientFolderPath, { recursive: true });
-    process.chdir(clientFolderPath);
+    fs.mkdirSync(botFolderPath, { recursive: true });
+    process.chdir(botFolderPath);
     await vectorStore.save(`data`);
     process.chdir(originalDir);
     console.log("Vector store created.");
@@ -103,13 +103,13 @@ async function runIngest(clientFolder) {
 
 module.exports = async (req, res) => {
     if (req.method === 'GET') {
-        const clientFolder = req.query.client;
-        if (!clientFolder) {
+        const botFolder = req.query.client;
+        if (!botFolder) {
             res.status(400).send('Client name is required in the URL');
             return;
         }
         try {
-            await runIngest(clientFolder);
+            await runIngest(botFolder);
             res.status(200).send('Ingestion process completed successfully');
         } catch (error) {
             console.error(error);

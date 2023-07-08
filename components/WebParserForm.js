@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './WebParserForm.module.css';
 
-const WebParserForm = ({ clientName }) => {
+const WebParserForm = ({ clientName, botName }) => {
   const [urls, setUrls] = useState([]);
   const [textInput, setTextInput] = useState('');
   const [error, setError] = useState('');
@@ -13,7 +13,7 @@ const WebParserForm = ({ clientName }) => {
 
   const fetchUrls = async () => {
     try {
-      const response = await axios.get(`/api/urls/${clientName}`);
+      const response = await axios.get(`/api/urls/${clientName}/${botName}`);
       console.log(response.data.data);
       setUrls(response.data && response.data.data && response.data.data.length ? response.data.data : []);
     } catch (error) {
@@ -39,7 +39,7 @@ const WebParserForm = ({ clientName }) => {
     setUrls(newUrls);
     setTextInput('');
     try {
-      await axios.post(`/api/urls/${clientName}`, { urls: newUrls });
+      await axios.post(`/api/urls/${clientName}/${botName}`, { urls: newUrls });
     } catch (error) {
       console.error(error);
       setError('Error updating URLs.');
@@ -52,7 +52,7 @@ const WebParserForm = ({ clientName }) => {
     setUrls(newUrls);
 
     try {
-      await axios.post(`/api/urls/${clientName}`, { urls: newUrls });
+      await axios.post(`/api/urls/${clientName}/${botName}`, { urls: newUrls });
     } catch (error) {
       console.error(error);
       setError('Error updating URLs.');
@@ -65,7 +65,7 @@ const WebParserForm = ({ clientName }) => {
     setUrls(newUrls);
 
     try {
-      await axios.delete(`/api/urls/${clientName}?lineIndex=${index}`);
+      await axios.delete(`/api/urls/${clientName}/${botName}?lineIndex=${index}`);
     } catch (error) {
       console.error(error);
       setError('Error removing URL.');

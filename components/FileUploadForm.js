@@ -9,7 +9,7 @@ import LoadingBar from 'react-top-loading-bar';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const FileUploadForm = ({ directoryEmpty, setDirectoryEmpty, clientName }) => {
+const FileUploadForm = ({ directoryEmpty, setDirectoryEmpty, clientName, botName }) => {
   const [files, setFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -24,7 +24,7 @@ const FileUploadForm = ({ directoryEmpty, setDirectoryEmpty, clientName }) => {
 
   const fetchFiles = async () => {
     try {
-      const response = await axios.get(`/api/files/${clientName}`);
+      const response = await axios.get(`/api/files/${clientName}/${botName}`);
       setFiles(response.data.files);
       setDirectoryEmpty(response.data.empty);
     } catch (error) {
@@ -76,7 +76,7 @@ const FileUploadForm = ({ directoryEmpty, setDirectoryEmpty, clientName }) => {
 
     try {
       console.log('Uploading files...');
-      await axios.post(`/api/upload/${clientName}`, formData, {
+      await axios.post(`/api/upload/${clientName}/${botName}`, formData, {
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           setLoadingBarProgress(progress);
@@ -103,7 +103,7 @@ const FileUploadForm = ({ directoryEmpty, setDirectoryEmpty, clientName }) => {
 
     try {
       console.log('Deleting file...');
-      await axios.delete(`/api/files/${clientName}?fileName=${fileName}`);
+      await axios.delete(`/api/files/${clientName}/${botName}?fileName=${fileName}`);
       await fetchFiles();
       alert('File deleted successfully');
     } catch (error) {

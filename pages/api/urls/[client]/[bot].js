@@ -3,24 +3,26 @@ const fs = require('fs');
 const path = require('path');
 
 export default (req, res) => {
+  const botFolder = req.query.bot;
   const clientFolder = req.query.client;
 
-  if (!clientFolder) {
+
+  if (!botFolder) {
     throw new Error('Client name is required in the URL');
   }
 
   const dataPath = process.env.dataPath;
-  const clientFolderPath = path.resolve(dataPath, clientFolder, 'original');
+  const botFolderPath = path.resolve(dataPath, clientFolder, botFolder, 'original');
   const fileParam = req.query.file || 'urls.txt'; // Use the 'file' query parameter or default to 'url.txt'
-  const filePath = path.join(clientFolderPath, fileParam);
+  const filePath = path.join(botFolderPath, fileParam);
 
-  if (!fs.existsSync(clientFolderPath)) {
-    fs.mkdirSync(clientFolderPath, { recursive: true });
+  if (!fs.existsSync(botFolderPath)) {
+    fs.mkdirSync(botFolderPath, { recursive: true });
   }
   // Check if styles.json and urls.txt files exist, and create them if they don't exist
   const requiredFiles = ['settings.json', 'urls.txt', 'qa.txt'];
   requiredFiles.forEach((file) => {
-    const filePath = path.join(clientFolderPath, file);
+    const filePath = path.join(botFolderPath, file);
     if (!fs.existsSync(filePath)) {
       fs.writeFileSync(filePath, '', 'utf8');
     }
@@ -43,7 +45,7 @@ export default (req, res) => {
   } else if (req.method === 'POST') {
     const data = req.body.urls;
     if (!data) {
-      return res.status(400).json({ error: 'Invalid data'});
+      return res.status(400).json({ error: 'Invalid data' });
     }
 
     try {

@@ -10,20 +10,24 @@ import rehypeRaw from 'rehype-raw'
 import axios from 'axios';
 import ChatScreen from '../components/ChatScreen';
 
-export default function Home({ initialClient }) {
-  const [client, setClient] = useState(initialClient);
+export default function Home({ clientName, botName }) {
+  const [client, setClient] = useState(clientName);
+  const [bot, setBot] = useState(botName);
+
   return (
     <>
-      <ChatScreen preview={false} initialClient={initialClient} />
+      <ChatScreen preview={false} clientName={clientName} botName={botName} />
     </>
   );
 }
 
 export async function getServerSideProps(context) {
   const { client } = context.query;
+  const { bot } = context.query;
   return {
     props: {
-      initialClient: client || '',
+      clientName: client || '',
+      botName: bot || '',
     },
   };
 }

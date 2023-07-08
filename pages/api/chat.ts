@@ -11,7 +11,7 @@ import { BufferWindowMemory } from 'langchain/memory';
 
 
 export default async function handler(req: any, res: any) {
-  const { question, history, client, settings } = req.body;
+  const { question, history, client, bot, settings } = req.body;
 
   const maintainChatHistory = (chatHistory: any, conversationLimit: any) => {
     // Parse the JSON object into a JavaScript array
@@ -80,7 +80,7 @@ export default async function handler(req: any, res: any) {
 
   const sanitizedQuestion = question.trim().replace("\n");
   const clientFolder = client;
-  const dir = path.resolve(process.cwd(), "data", "clients", clientFolder, "data");
+  const dir = path.resolve(process.cwd(), "data", "clients", clientFolder, bot, "data");
 
 
   try {

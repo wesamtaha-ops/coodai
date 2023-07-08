@@ -4,7 +4,7 @@
   "chatTemperature": 0.55,
   "chatModel": "gpt-3.5-turbo-16k-0613",
   "mainBG": "#f6f4ee",
-  "mainFont": "Arial",
+  "mainFont": "Almarai",
   "chatIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
   "userIcon": "https://cdn.jawwy.tv/9/avatar-smile.svg",
   "userMessageBG": "#ede4d0",

@@ -9,10 +9,11 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
 import axios from 'axios';
 
-export default function ChatScreen({ initialClient, preview }) {
+export default function ChatScreen({ clientName, botName, preview }) {
     const [userInput, setUserInput] = useState('');
     const [loading, setLoading] = useState(false);
-    const [client, setClient] = useState(initialClient);
+    const [client, setClient] = useState(clientName);
+    const [bot, setBot] = useState(botName);
     const [messageState, setMessageState] = useState({
         messages: [
             {
@@ -29,12 +30,11 @@ export default function ChatScreen({ initialClient, preview }) {
     const textAreaRef = useRef(null);
     const [settings, setSettings] = useState([]);
     const [error, setError] = useState('');
-    const [clientName, setClientName] = useState(initialClient);
 
 
     const fetchUrls = async () => {
         try {
-            const response = await axios.get(`/api/urls/${clientName}?file=settings.json`);
+            const response = await axios.get(`/api/urls/${clientName}/${botName}?file=settings.json`);
             setSettings(response.data.data);
             console.log(response.data.data);
         } catch (error) {
@@ -97,15 +97,13 @@ export default function ChatScreen({ initialClient, preview }) {
                 question,
                 history,
                 client,
+                bot,
                 settings
             }),
             signal: ctrl.signal,
             onmessage: (event) => {
                 console.log(event.data);
                 if (event.data === '{"data":"[DONE]"}') {
-
-                    // 
-
                     setMessageState((state) => ({
                         history: [...state.history, [question, state.pending || '']],
                         messages: [
@@ -203,8 +201,6 @@ export default function ChatScreen({ initialClient, preview }) {
                             }
                             return (
                                 <div
-
-
                                     key={index} className={className} style={{
                                         color: message.type !== 'apiMessage' ? settings.userMessageColor : settings.systemMessageColor,
                                         backgroundColor: message.type !== 'apiMessage' ? settings.userMessageBG : settings.systemMessageBG,
@@ -281,9 +277,11 @@ export default function ChatScreen({ initialClient, preview }) {
 
 export async function getServerSideProps(context) {
     const { client } = context.query;
+    const { bot } = context.query;
     return {
         props: {
-            initialClient: client || '',
+            clientName: client || '',
+            botName: bot || '',
         },
     };
 }

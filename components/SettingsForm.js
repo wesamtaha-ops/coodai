@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './SettingsForm.module.css';
 import { SketchPicker } from 'react-color';
 import { ChatScreen } from './ChatScreen';
-const SettingsForm = ({ clientFolder }) => {
+const SettingsForm = ({ clientFolder, botName }) => {
     const [systemPrompt, setSystemPrompt] = useState('');
     const [chatTemperature, setChatTemperature] = useState(0);
     const [allowChatHistory, setAllowChatHistory] = useState(0);
@@ -24,7 +24,7 @@ const SettingsForm = ({ clientFolder }) => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const response = await fetch(`/api/settings?clientFolder=${encodeURIComponent(clientFolder)}`);
+                const response = await fetch(`/api/settings?clientFolder=${encodeURIComponent(clientFolder)}&botName=${encodeURIComponent(botName)}`);
 
                 if (response.ok) {
                     const settings = await response.json();
@@ -119,9 +119,9 @@ const SettingsForm = ({ clientFolder }) => {
             userIconColor,
             // Include other form data fields here
         };
-        
+
         try {
-            const response = await fetch(`/api/settings?clientFolder=${encodeURIComponent(clientFolder)}`, {
+            const response = await fetch(`/api/settings?clientFolder=${encodeURIComponent(clientFolder)}&botName=${encodeURIComponent(botName)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -142,14 +142,14 @@ const SettingsForm = ({ clientFolder }) => {
     return (
         <form className={styles.settingsForm} onSubmit={handleSubmit}>
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> System <br /> Prompt: </div>
+                <div className={styles.innerLable}> System <br /> Prompt: </div>
                 <textarea
-                style={{ lineHeight: 2, fontFamily: 'Arial', fontSize: 16 }}
-                value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)} />
+                    style={{ lineHeight: 2, fontFamily: 'Arial', fontSize: 16 }}
+                    value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)} />
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> Temperature: </div>
+                <div className={styles.innerLable}> Temperature: </div>
                 <input
                     type="range"
                     min={0}
@@ -162,7 +162,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> Chat Model: </div>
+                <div className={styles.innerLable}> Chat Model: </div>
                 <select value={chatModel} onChange={(e) => setChatModel(e.target.value)}>
                     <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                     <option value="gpt-3.5-turbo-16k-0613">gpt-3.5-turbo-16k-0613</option>
@@ -172,7 +172,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> Chat Memory: </div>
+                <div className={styles.innerLable}> Chat Memory: </div>
                 <select value={allowChatHistory} onChange={(e) => setAllowChatHistory(e.target.value)}>
                     <option value="0">No Memory</option>
                     <option value="1">With Memory</option>
@@ -180,9 +180,9 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}>  Main
-                <br />
-                Background </div>
+                <div className={styles.innerLable}>  Main
+                    <br />
+                    Background </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: mainBG }}
@@ -197,7 +197,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}>Font Family </div>
+                <div className={styles.innerLable}>Font Family </div>
                 <select value={mainFont} onChange={(e) => setMainFont(e.target.value)}>
                     <option value="Arial">Arial</option>
                     <option value="Almarai">Almarai</option>
@@ -205,17 +205,17 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}>  Chat Icon </div>
+                <div className={styles.innerLable}>  Chat Icon </div>
                 <input type="text" value={chatIcon} onChange={(e) => setChatIcon(e.target.value)} />
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}>  User Icon </div>
+                <div className={styles.innerLable}>  User Icon </div>
                 <input type="text" value={userIcon} onChange={(e) => setUserIcon(e.target.value)} />
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> User Message <br /> Background </div>
+                <div className={styles.innerLable}> User Message <br /> Background </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: userMessageBG }}
@@ -230,7 +230,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> User Message<br /> Text </div>
+                <div className={styles.innerLable}> User Message<br /> Text </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: userMessageColor }}
@@ -245,7 +245,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> System Message <br /> Background </div>
+                <div className={styles.innerLable}> System Message <br /> Background </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: systemMessageBG }}
@@ -260,7 +260,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> System Message <br /> Text </div>
+                <div className={styles.innerLable}> System Message <br /> Text </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: systemMessageColor }}
@@ -275,7 +275,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> Question Area <br /> Background </div>
+                <div className={styles.innerLable}> Question Area <br /> Background </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: promptBG }}
@@ -290,7 +290,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}> Question Color </div>
+                <div className={styles.innerLable}> Question Color </div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: promptColor }}
@@ -305,7 +305,7 @@ const SettingsForm = ({ clientFolder }) => {
             </label>
             <br />
             <label className={styles.outLable}>
-            <div className={styles.innerLable}>Submit Button <br /> Background</div>
+                <div className={styles.innerLable}>Submit Button <br /> Background</div>
                 <div
                     className={styles.colorPickerSwatch}
                     style={{ background: submitBG }}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './QuestionAnswersForm.module.css';
 
-const QuestionAnswersForm = ({ clientName }) => {
+const QuestionAnswersForm = ({ clientName, botName }) => {
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [questionInput, setQuestionInput] = useState('');
@@ -15,7 +15,7 @@ const QuestionAnswersForm = ({ clientName }) => {
 
     const fetchQA = async () => {
         try {
-            const response = await axios.get(`/api/questions/${clientName}`);
+            const response = await axios.get(`/api/questions/${clientName}/${botName}`);
             const { questions, answers } = response.data;
             setQuestions(questions);
             setAnswers(answers);
@@ -41,7 +41,7 @@ const QuestionAnswersForm = ({ clientName }) => {
         setError('');
 
         try {
-            await axios.post(`/api/questions/${clientName}`, {
+            await axios.post(`/api/questions/${clientName}/${botName}`, {
                 questions: newQuestions,
                 answers: newAnswers,
             });
@@ -61,7 +61,7 @@ const QuestionAnswersForm = ({ clientName }) => {
         setAnswers(newAnswers);
 
         try {
-            await axios.post(`/api/questions/${clientName}`, {
+            await axios.post(`/api/questions/${clientName}/${botName}`, {
                 questions: newQuestions,
                 answers: newAnswers,
             });
@@ -81,7 +81,7 @@ const QuestionAnswersForm = ({ clientName }) => {
         setAnswers(newAnswers);
 
         try {
-            await axios.post(`/api/questions/${clientName}`, {
+            await axios.post(`/api/questions/${clientName}/${botName}`, {
                 questions: newQuestions,
                 answers: newAnswers,
             });

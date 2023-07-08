@@ -4,17 +4,19 @@ import path from 'path';
 const excludedFiles = ['urls.txt', 'qa.txt', 'settings.json'];
 
 export default function handler(req, res) {
+  const { bot } = req.query;
   const { client } = req.query;
+
 
   if (req.method === 'GET') {
     // Retrieve the list of files for the client
     const dataPath = process.env.dataPath;
     const originalDir = process.cwd();
     process.chdir(originalDir);
-    const clientFolderPath = path.resolve(dataPath + client + '/original/');
+    const botFolderPath = path.resolve(dataPath + client + "/" + bot + '/original/');
 
     try {
-      const files = fs.readdirSync(clientFolderPath)
+      const files = fs.readdirSync(botFolderPath)
         .filter((file) => !excludedFiles.includes(file)); // Exclude specified files
 
       if (files.length === 0) {
@@ -41,8 +43,8 @@ export default function handler(req, res) {
       return;
     }
     const dataPath = process.env.dataPath;
-    const clientFolderPath = path.resolve(dataPath + client + '/original/');
-    const filePath = path.join(clientFolderPath, fileName);
+    const botFolderPath = path.resolve(dataPath + client + "/" + bot + '/original/');
+    const filePath = path.join(botFolderPath, fileName);
 
     try {
       fs.unlinkSync(filePath);

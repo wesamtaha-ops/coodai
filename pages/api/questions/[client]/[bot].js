@@ -3,12 +3,13 @@ import path from 'path';
 
 export default function handler(req, res) {
   const { client } = req.query;
+  const { bot } = req.query;
 
   if (req.method === 'GET') {
     try {
       const dataPath = process.env.dataPath;
-      const clientFolderPath = path.resolve(dataPath, client, 'original');
-      const qaFilePath = path.join(clientFolderPath, 'qa.txt');
+      const botFolderPath = path.resolve(dataPath, client, bot, 'original');
+      const qaFilePath = path.join(botFolderPath, 'qa.txt');
 
       if (!fs.existsSync(qaFilePath)) {
         fs.writeFileSync(qaFilePath, '', 'utf8');
@@ -33,8 +34,8 @@ export default function handler(req, res) {
 
     try {
       const dataPath = process.env.dataPath;
-      const clientFolderPath = path.resolve(dataPath, client, 'original');
-      const qaFilePath = path.join(clientFolderPath, 'qa.txt');
+      const botFolderPath = path.resolve(dataPath, client,bot, 'original');
+      const qaFilePath = path.join(botFolderPath, 'qa.txt');
       const qaLines = questions.map((question, index) =>
         `${question.trim()}|${answers[index].trim()}`
       );
