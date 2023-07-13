@@ -103,13 +103,14 @@ async function runIngest(clientFolder, botFolder) {
 
 module.exports = async (req, res) => {
     if (req.method === 'GET') {
-        const botFolder = req.query.client;
+        const clientFolder = req.query.client;
+        const botFolder = req.query.bot;
         if (!botFolder) {
             res.status(400).send('Client name is required in the URL');
             return;
         }
         try {
-            await runIngest(botFolder);
+            await runIngest(clientFolder, botFolder);
             res.status(200).send('Ingestion process completed successfully');
         } catch (error) {
             console.error(error);
