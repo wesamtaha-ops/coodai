@@ -11,8 +11,6 @@ export default function handler(req, res) {
   if (req.method === 'GET') {
     // Retrieve the list of files for the client
     const dataPath = process.env.dataPath;
-    const originalDir = process.cwd();
-    process.chdir(originalDir);
     const botFolderPath = path.resolve(dataPath + client + "/" + bot + '/original/');
 
     try {

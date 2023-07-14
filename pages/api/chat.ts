@@ -74,13 +74,10 @@ export default async function handler(req: any, res: any) {
 
 
   const windowMemory: any = BufferWindowMemory;
-
-  const originalDir = process.cwd();
-  process.chdir(originalDir);
-
+  const dataPath = process.env.dataPath;
   const sanitizedQuestion = question.trim().replace("\n");
   const clientFolder = client;
-  const dir = path.resolve(process.cwd(), "data", "clients", clientFolder, bot, "data");
+  const dir = path.resolve(dataPath, clientFolder, bot, "data");
 
 
   try {

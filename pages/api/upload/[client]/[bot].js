@@ -21,7 +21,6 @@ export default (req, res) => {
 
 
     const dataPath = process.env.dataPath;
-    
     form.uploadDir = path.resolve(dataPath + clientFolder + '/' + botFolder + '/original/');
     fs.mkdirSync(form.uploadDir, { recursive: true });
 

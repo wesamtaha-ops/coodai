@@ -1,94 +1,135 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import Head from 'next/head';
-import styles from '../../styles/Home.module.css';
-import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
-import CircularProgress from '@mui/material/CircularProgress';
-import { fetchEventSource } from '@microsoft/fetch-event-source';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw'
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import axios from 'axios';
 import Navbar from '../../components/layout/Navbar';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import Link from 'next/link';
-
 
 export default function Home({ clientName }) {
     const [client, setClient] = useState(clientName);
-
-    const [showModal, setShowModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showRenameModal, setShowRenameModal] = useState(false);
     const [botName, setBotName] = useState('');
+    const [botDirectories, setBotDirectories] = useState([]);
+    const [renameBotDirectory, setRenameBotDirectory] = useState('');
+
     const availableCredits = 50;
     const totalCredits = 100;
     const availableStorage = 95.13;
     const totalStorage = 100;
 
+    useEffect(() => {
+        fetchBotDirectories();
+    }, []);
 
-    const handleModalOpen = () => {
-        setShowModal(true);
+    const fetchBotDirectories = async () => {
+        try {
+            const response = await axios.get(`/api/files/${client}`);
+            setBotDirectories(response.data.directories);
+        } catch (error) {
+            console.error('Failed to fetch bot directories:', error);
+        }
     };
 
-    const handleModalClose = () => {
-        setShowModal(false);
+    const handleAddModalOpen = () => {
+        setShowAddModal(true);
+    };
+
+    const handleAddModalClose = () => {
+        setShowAddModal(false);
+        setBotName('');
+    };
+
+    const handleRenameModalOpen = (botDirectory) => {
+        setShowRenameModal(true);
+        setRenameBotDirectory(botDirectory);
+        setBotName(botDirectory);
+    };
+
+    const handleRenameModalClose = () => {
+        setShowRenameModal(false);
+        setRenameBotDirectory('');
         setBotName('');
     };
 
     const handleBotNameChange = (event) => {
-        setBotName(event.target.value);
+        const name = event.target.value.replace(/\s/g, '').toLowerCase();
+        setBotName(name);
     };
 
-    const handleBotNameSubmit = () => {
-        // Perform actions with the bot name (e.g., create a new bot)
-        handleModalClose();
+    const handleAddBot = async () => {
+        try {
+            await axios.post(`/api/files/${client}?directoryName=${botName}`);
+            fetchBotDirectories();
+            handleAddModalClose();
+        } catch (error) {
+            console.error('Failed to create bot directory:', error);
+        }
+    };
+
+    const handleRenameBot = async () => {
+        try {
+            await axios.post(`/api/files/${client}?directoryName=${renameBotDirectory}&newDirectoryName=${botName}`);
+            fetchBotDirectories();
+            handleRenameModalClose();
+        } catch (error) {
+            console.error('Failed to rename bot directory:', error);
+        }
+    };
+
+    const handleDeleteBot = async (directoryName) => {
+        try {
+            if (confirm('Are you sure you want to delete this bot?')) {
+                await axios.delete(`/api/files/${client}?directoryName=${directoryName}`);
+                fetchBotDirectories();
+            }
+        } catch (error) {
+            console.error('Failed to delete bot directory:', error);
+        }
     };
 
     return (
         <div style={{ backgroundColor: '#f1f5f9' }}>
             <Navbar clientFolder={clientName} />
-            <div className="container mt-5" >
+            <div className="container mt-5">
                 <div className="row" style={{ padding: 0 }}>
-                    <div className="col-lg-6" style={{ padding: 0, paddingRight: 20 }}>
-                        <div className="crd mb-4">
-                            <h4 >My Chatbots 3/3</h4>
+                    <div className="col-lg-12" style={{ padding: 0, paddingRight: 20 }}>
+                        <div className="crd mb-3">
+                            <h4>My Chatbots ({botDirectories.length})</h4>
                             <br /><br />
-                            <div >
-                                <button className="btn btn-primary btn-block" style={{ backgroundColor: '#9c27b0', border: 0, padding: 10, fontWeight: 700 }} onClick={handleModalOpen}>
+                            <div>
+                                <button className="btn btn-primary btn-block" style={{ backgroundColor: '#9c27b0', border: 0, padding: 10, fontWeight: 700 }} onClick={handleAddModalOpen}>
                                     Create New ChatBOT
                                 </button>
                             </div>
                         </div>
 
-                        <Link href='/upload-and-train/smartcode/law' class=" flex flex-col justify-between w-40 border rounded relative overflow-hidden">
-                            <img src="https://t3.ftcdn.net/jpg/03/64/76/98/360_F_364769865_mVmKwtc1286zxkuskmxUug2AeX7NYyHA.jpg" width="180" height="180" />
-                            <div class=" px-1 flex justify-center items-center h-14">
-                                <h3 class="text-xs md:text-sm font-semibold text-center overflow-hidden m-auto">
-                                    Sahmsi
-                                </h3>
-                            </div>
-                        </Link>
+                        {botDirectories.map((botDirectory) => (
+                            <div key={botDirectory} class=" flex flex-col justify-between w-40 border rounded relative overflow-hidden" >
+                                <Link href={`/upload-and-train/${clientName}/${botDirectory}`} >
+                                    <img src="https://t3.ftcdn.net/jpg/03/64/76/98/360_F_364769865_mVmKwtc1286zxkuskmxUug2AeX7NYyHA.jpg" width="180" height="180" />
+                                </Link>
+                                <div className="px-1 flex justify-center items-center h-14">
+                                    <Link key={botDirectory} href={`/upload-and-train/${clientName}/${botDirectory}`} >
 
-                        <Link href='/upload-and-train/smartcode/votly' class=" flex flex-col justify-between w-40 border rounded relative overflow-hidden">
-                            <img src="https://t3.ftcdn.net/jpg/03/64/76/98/360_F_364769865_mVmKwtc1286zxkuskmxUug2AeX7NYyHA.jpg" width="180" height="180" />
-                            <div class=" px-1 flex justify-center items-center h-14">
-                                <h3 class="text-xs md:text-sm font-semibold text-center overflow-hidden m-auto">
-                                    VOTLY
-                                </h3>
+                                        <h3 className="text-xs md:text-sm font-semibold text-center overflow-hidden m-auto">
+                                            {botDirectory}
+                                        </h3>
+                                    </Link>
+                                    <div>
+                                        <button className="btn btn-danger btn-sm ml-2" style={{ marginBottom: 10, marginRight: 10 }} onClick={() => handleDeleteBot(botDirectory)}>
+                                            Delete
+                                        </button>
+                                        <button className="btn btn-primary btn-sm ml-2" style={{ marginBottom: 10 }} onClick={() => handleRenameModalOpen(botDirectory)}>
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </Link>
-
-                        <Link href='/upload-and-train/smartcode/wevo' class=" flex flex-col justify-between w-40 border rounded relative overflow-hidden">
-                            <img src="https://t3.ftcdn.net/jpg/03/64/76/98/360_F_364769865_mVmKwtc1286zxkuskmxUug2AeX7NYyHA.jpg" width="180" height="180" />
-                            <div class=" px-1 flex justify-center items-center h-14">
-                                <h3 class="text-xs md:text-sm font-semibold text-center overflow-hidden m-auto">
-                                    WEVO
-                                </h3>
-                            </div>
-                        </Link>
-
+                        ))}
                     </div>
-                    <div className="col-lg-6" style={{ padding: 0 }}>
+                    <div className="col-12" style={{ padding: 0, display: 'none' }}>
                         <div className="card">
 
                             <div className="card-header">Current Plan Details</div>
@@ -143,9 +184,9 @@ export default function Home({ clientName }) {
                             <br /><br /><br /><br />
                         </div>
                     </div>
-
                 </div>
-                <Modal show={showModal} onHide={handleModalClose}>
+
+                <Modal show={showAddModal} onHide={handleAddModalClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Create New ChatBOT</Modal.Title>
                     </Modal.Header>
@@ -159,22 +200,44 @@ export default function Home({ clientName }) {
                         />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleModalClose}>
+                        <Button variant="secondary" onClick={handleAddModalClose}>
                             Cancel
                         </Button>
-                        <Button variant="primary" onClick={handleBotNameSubmit}>
+                        <Button variant="primary" onClick={handleAddBot} disabled={!botName}>
                             Create Bot
                         </Button>
                     </Modal.Footer>
                 </Modal>
-            </div >
+
+                <Modal show={showRenameModal} onHide={handleRenameModalClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Rename ChatBOT</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter new bot name"
+                            value={botName}
+                            onChange={handleBotNameChange}
+                        />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleRenameModalClose}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={handleRenameBot} disabled={!botName}>
+                            Rename Bot
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
         </div >
     );
 }
 
 export async function getServerSideProps(context) {
     const { client } = context.query;
-    const { bot } = context.query;
     return {
         props: {
             clientName: client || '',

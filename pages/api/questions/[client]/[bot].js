@@ -7,6 +7,9 @@ export default function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+      // const originalDir = process.cwd();
+      // process.chdir(originalDir);
+
       const dataPath = process.env.dataPath;
       const botFolderPath = path.resolve(dataPath, client, bot, 'original');
       const qaFilePath = path.join(botFolderPath, 'qa.txt');
@@ -25,6 +28,9 @@ export default function handler(req, res) {
       res.status(500).json({ error: 'Error fetching QA data' });
     }
   } else if (req.method === 'POST') {
+
+
+
     const { questions, answers } = req.body;
 
     if (!Array.isArray(questions) || !Array.isArray(answers)) {
@@ -33,9 +39,15 @@ export default function handler(req, res) {
     }
 
     try {
+      // const originalDir = process.cwd();
+      // process.chdir(originalDir);
+
       const dataPath = process.env.dataPath;
-      const botFolderPath = path.resolve(dataPath, client,bot, 'original');
+      const botFolderPath = `${dataPath}/${client}/${bot}/original`;
       const qaFilePath = path.join(botFolderPath, 'qa.txt');
+
+      console.log('dataPath', botFolderPath);
+
       const qaLines = questions.map((question, index) =>
         `${question.trim()}|${answers[index].trim()}`
       );

@@ -16,6 +16,7 @@ export default (req, res) => {
   const fileParam = req.query.file || 'urls.txt'; // Use the 'file' query parameter or default to 'url.txt'
   const filePath = path.join(botFolderPath, fileParam);
 
+  
   if (!fs.existsSync(botFolderPath)) {
     fs.mkdirSync(botFolderPath, { recursive: true });
   }
@@ -30,6 +31,7 @@ export default (req, res) => {
 
   if (req.method === 'GET') {
     try {
+      
       const fileContent = fs.readFileSync(filePath, 'utf8');
       let data;
       if (path.extname(fileParam) === '.json') {
