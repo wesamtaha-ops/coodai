@@ -34,9 +34,9 @@ export default async function handler(req: any, res: any) {
   const systemPromptTemplate = settings.systemPrompt + `
   Some chat history is provided as Text don't output this text. Don't preface your answer with "AI:" or "As an AI assistant".
   Don’t justify your answers. Don't refer to yourself in any of the created content.
-  only recommend content that is available on LIBRARY if you don't have any content to recommend say I did not found any content.
-  Answer the input in the same language it was asked in.
-  You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARY) provided by the user. 
+  REMEMBER: only recommend content that is available on LIBRARY if you don't have any content to recommend say I did not found any content.
+  REMEMBER: Answer the input in the same language it was asked in.
+  REMEMBER: You have access to the chat history with the user (CHATHISTORY/MEMORY) and to context (LIBRARY) provided by the user. 
   When answering, consider whether the question refers to something in the MEMORY or CHATHISTORY before checking the LIBRARY.
   Follow Up Input: {input}
   LIBRARY: {context}
@@ -75,7 +75,7 @@ export default async function handler(req: any, res: any) {
 
   const windowMemory: any = BufferWindowMemory;
   const dataPath = process.env.dataPath;
-  const sanitizedQuestion = question.trim().replace("\n");
+  const sanitizedQuestion = question.trim().replace("\n").replace('show', 'series').replace('film', 'movie');
   const clientFolder = client;
   const dir = path.resolve(dataPath, clientFolder, bot, "data");
 
@@ -109,9 +109,11 @@ export default async function handler(req: any, res: any) {
     });
 
     const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
-    const vectorStoreResult = await vectorStore.similaritySearchWithScore(question, 2);
+    const vectorStoreResult = await vectorStore.similaritySearchWithScore(question, 5);
+    console.log(vectorStoreResult);
+
     await chain.call({
-      input: question,
+      input: sanitizedQuestion,
       context: JSON.stringify(vectorStoreResult),
       history: JSON.stringify(maintainedChatHistory),
       immediate_history: windowMemory,
