@@ -74,7 +74,7 @@ export default async function handler(req: any, res: any) {
 
 
   const windowMemory: any = BufferWindowMemory;
-  const dataPath = process.env.dataPath;
+  const dataPath = process.env.dataPath || "default/path";
   const sanitizedQuestion = question.trim().replace("\n").replace('show', 'series').replace('film', 'movie');
   const clientFolder = client;
   const dir = path.resolve(dataPath, clientFolder, bot, "data");
