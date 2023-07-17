@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
 import axios from 'axios';
 
+
 export default function ChatScreen({ clientName, botName, preview }) {
     const [userInput, setUserInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -217,6 +218,7 @@ export default function ChatScreen({ clientName, botName, preview }) {
                                             linkTarget="_blank"
                                             escapeHtml={false}
                                             rehypePlugins={[rehypeRaw]}
+                                            transformLinkUri={(uri) => { return uri.startsWith('https://deeplink') ? `stctv://${uri}`.replace('https://', '') : uri }}
                                         >
                                             {message.message}
                                         </ReactMarkdown>
