@@ -4,6 +4,14 @@ import Link from 'next/link';
 import styles from './Navbar.module.css';
 
 const Navbar = ({ clientFolder }) => {
+    const handleLogout = () => {
+        // For simplicity, let's assume the login status is stored in a session cookie
+        document.cookie = 'adminLoggedIn=false; Max - Age=-99999999; ';
+        document.cookie = 'adminLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        setTimeout(() => {
+            window.location.reload(); // Redirect to the login page after logout
+        }, 1000);
+    };
     return (
         <nav className={`navbar navbar-expand-lg navbar-light bg-light ${styles.navbar}`}>
             <div className={`container d-flex justify-content-between align-items-center`}>
@@ -12,9 +20,9 @@ const Navbar = ({ clientFolder }) => {
                 </Link>
 
                 <div className={`d-flex justify-content-end align-items-center ${styles['navbar-nav']}`}>
-                    <Link href={`/my-account/${clientFolder}`} passHref>
-                        <button className={`btn btn-primary ${styles['btn-primary']}`}>Logout</button>
-                    </Link>
+                    <button onClick={() => {
+                        handleLogout()
+                    }} className={`btn btn-primary ${styles['btn-primary']}`}>Logout</button>
                 </div>
             </div>
         </nav >

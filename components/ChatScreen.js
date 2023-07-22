@@ -18,7 +18,7 @@ export default function ChatScreen({ clientName, botName, preview }) {
     const [messageState, setMessageState] = useState({
         messages: [
             {
-                message: "Hi, I'm <b style='color: blueviolet;' >" + client.toUpperCase() + " AI </b> I am here to assist you with any questions or recommendations. <br /> How can I help you today?",
+                message: "Hi, I'm <b style='color: blueviolet;' >" + botName + " AI </b> I am here to assist you with any questions or recommendations. <br /> How can I help you today?",
                 type: 'apiMessage',
             },
         ],
