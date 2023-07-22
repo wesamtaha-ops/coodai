@@ -2,3 +2,7 @@ https://cood.ai/stctv/web-movies.txt
 https://cood.ai/stctv/web-series.txt
 https://www.stctv.com/faq
 https://www.stctv.com/en/faq
+https://cood.ai/stctv/web-trending-series.txt
+https://cood.ai/stctv/web-trending-movies.txt
+https://cood.ai/stctv/web-popular-series.txt
+https://cood.ai/stctv/web-popular-movies.txt
