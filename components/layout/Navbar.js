@@ -6,8 +6,8 @@ import styles from './Navbar.module.css';
 const Navbar = ({ clientFolder }) => {
     const handleLogout = () => {
         // For simplicity, let's assume the login status is stored in a session cookie
-        document.cookie = 'adminLoggedIn=false; Max - Age=-99999999; ';
-        document.cookie = 'adminLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'ck=false; Max - Age=-99999999; ';
+        document.cookie = 'ck=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         setTimeout(() => {
             window.location.reload(); // Redirect to the login page after logout
         }, 1000);

@@ -31,14 +31,23 @@ const UploadAndTrain = ({ clientName, botName, adminUsername, adminPassword }) =
   const checkLoginStatus = () => {
     // Add your logic to check if the admin is logged in
     // For simplicity, let's assume the login status is stored in a session cookie
-    const adminLoggedIn = document.cookie.includes('adminLoggedIn=true');
+    const isCookieExpired = (cookieName) => {
+      const cookies = document.cookie.split('; ');
+      for (const cookie of cookies) {
+        const [name, value] = cookie.split('=');
+        if (name === cookieName) {
+          const expirationTime = new Date(value);
+          return expirationTime.getTime() < Date.now();
+        }
+      }
+      return true; // Cookie not found or expired
+    };
+    const adminLoggedIn = !document.cookie.includes('ck=false') && !isCookieExpired('ck');
     setIsAdminLoggedIn(adminLoggedIn);
   };
 
   const handleLogin = () => {
     setIsAdminLoggedIn(true);
-    // For simplicity, let's assume the login status is stored in a session cookie
-    document.cookie = 'adminLoggedIn=true';
   };
 
 
