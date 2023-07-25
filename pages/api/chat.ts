@@ -109,7 +109,7 @@ export default async function handler(req: any, res: any) {
     });
 
     const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
-    const vectorStoreResult = await vectorStore.similaritySearchWithScore(question, 5);
+    const vectorStoreResult = await vectorStore.similaritySearchWithScore(question, 3);
     console.log(vectorStoreResult);
 
     await chain.call({

@@ -8,6 +8,7 @@
     background: #f9f9f9;
     overflow: hidden;
     box-shadow: 0 0 30.7407px 4.39152px rgba(0, 0, 0, .07);
+    padding-top: 0;
 }
 
 .header {
@@ -203,8 +204,8 @@
 }
 
 .cloud {
-    width: 85vw;
-    max-width: 1200px;
+    width: 90vw;
+    max-width: 1250px;
     height: 85vh;
     border-radius: 0.5rem;
     display: flex;
@@ -331,18 +332,25 @@
 
     .main {
         padding: 0rem;
-        max-height: 100vh;
-        height: 100vh;
+        max-height: 95vh;
+        height: 95vh;
     }
 
     .cloud {
         width: 100vw;
-        height: 85vh;
+        height: 85%;
         width: 100vw !important;
+
+    }
+
+    .cloudform {
+        margin-top: -30px;
+        margin-bottom: -30px;
     }
 
     .textarea {
         width: calc(100vw - 30px) !important;
+
     }
 
     .topnav {
@@ -366,8 +374,8 @@
     }
 
     .usermessage, .apimessage, .usermessagewaiting {
-        max-width: 90% !important;
-        width: 90% !important;
+        max-width: 95% !important;
+        width: 95% !important;
     }
 
 

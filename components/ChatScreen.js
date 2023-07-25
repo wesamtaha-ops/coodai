@@ -18,7 +18,7 @@ export default function ChatScreen({ clientName, botName, preview }) {
     const [messageState, setMessageState] = useState({
         messages: [
             {
-                message: "Hi, I'm <b style='color: blueviolet;' >" + botName + " AI </b> I am here to assist you with any questions or recommendations. <br /> How can I help you today?",
+                message: "Welcome to " + botName + "'s AI Assistant! <br /> Lights, camera, action! 🎬 Ready for movie and TV show recommendations? <br /> Just ask and let the entertainment begin. 📺🍿 ",
                 type: 'apiMessage',
             },
         ],
@@ -161,9 +161,18 @@ export default function ChatScreen({ clientName, botName, preview }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className={styles.main} style={{ backgroundColor: settings.mainBG || '#f9f9f9', fontFamily: settings.mainFont || 'Arial', borderRadius: preview ? 20 : 0, height: preview ? 'auto' : '100vh' }} >
+
+            <main className={styles.main} style={{ textAlign: 'left', backgroundColor: settings.mainBG || '#f9f9f9', fontFamily: settings.mainFont || 'Arial', borderRadius: preview ? 20 : 0, height: preview ? 'auto' : '100vh' }} >
+
                 <div className={styles.cloud} style={{ width: preview ? '100%' : '85vw', height: preview ? 500 : 'initial' }} >
+
                     <div ref={messageListRef} className={styles.messagelist} style={{ height: preview ? '100%' : '80vh' }}  >
+                        <div style={{ position: 'fixed', backgroundColor: settings.mainBG || '#f9f9f9', zIndex: 99999, width: '100vw', height: 70, marginTop: -20, marginLeft: -20, paddingLeft: 20 }}>
+                            <a href='https://stvtv.com'>
+                                <Image src={'/logo.svg'} width={115} height={70} style={{ marginTop: 5, marginBottom: 0 }} />
+                            </a>
+                        </div>
+                        <br /><br /><br />
                         {chatMessages.map((message, index) => {
                             let icon;
                             let className;
