@@ -165,7 +165,7 @@ const SettingsForm = ({ clientFolder, botName }) => {
                 <div className={styles.innerLable}> Chat Model: </div>
                 <select value={chatModel} onChange={(e) => setChatModel(e.target.value)}>
                     <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                    <option value="gpt-3.5-turbo-16k-0613">gpt-3.5-turbo-16k-0613</option>
+                    <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                     <option value="gpt4">gpt4</option>
                     <option value="gpt-4-0613">gpt-4-0613</option>
                 </select>
