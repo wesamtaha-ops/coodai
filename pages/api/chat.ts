@@ -1,6 +1,8 @@
 import path from "path";
-// import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
+import { PineconeStore } from "@langchain/pinecone";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
+import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
+
 import { BufferWindowMemory } from "langchain/memory";
 import { LLMChain } from "langchain/chains";
 import { BaseCallbackHandler } from "@langchain/core/callbacks/base";
@@ -10,9 +12,33 @@ import {
   SystemMessagePromptTemplate,
 } from "@langchain/core/prompts";
 
+import { fetchShopwareProducts } from "./shopwareHelper.js";
+
 
 export default async function handler(req: any, res: any) {
   const { question, history, client, bot, settings } = req.body;
+
+  // Improved Keyword Extraction Logic
+  const extractProductKeyword = (input) => {
+    const PRODUCT_KEYWORDS = ["watches", "shoes", "bags", "products", "accessories"];
+    const match = PRODUCT_KEYWORDS.find((keyword) =>
+      input.toLowerCase().includes(keyword)
+    );
+    return match || "popular"; // Default to "popular" if no keyword is found
+  };
+
+  const productKeyword = extractProductKeyword(question);
+  let productRecommendations = [];
+
+  try {
+    // Fetch Product Recommendations
+    productRecommendations = await fetchShopwareProducts(productKeyword);
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    productRecommendations = []; // Ensure recommendations are always an array
+  }
+
+
 
   const maintainChatHistory = (chatHistory: any, conversationLimit: any) => {
     // Parse the JSON object into a JavaScript array
@@ -68,7 +94,23 @@ export default async function handler(req: any, res: any) {
   });
 
   try {
-    // const vectorstore = await HNSWLib.load(dir, new OpenAIEmbeddings());
+    const pinecone = new PineconeClient({
+      apiKey:
+        'pcsk_2feGQJ_BdGdtB11PVrHAXAaFStXTd8hMi4PksJzv5UN3E8DzLMZ58Aww4ANutnpxDN99H2',
+    });
+
+    const embeddings = new OpenAIEmbeddings({
+      model: "text-embedding-3-large",
+    });
+    const pineconeIndex = pinecone.Index('chatbot');
+
+    const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+      pineconeIndex,
+      // Maximum number of batch requests to allow at once. Each batch is 1000 vectors.
+      maxConcurrency: 5,
+      // You can pass a namespace here too
+      // namespace: "foo",
+    });
     const llm = new ChatOpenAI({
       temperature: settings.chatTemperature,
       maxTokens: settings.chatModel === 'gpt-3.5-turbo' ? 4096 : 3000,
@@ -91,18 +133,20 @@ export default async function handler(req: any, res: any) {
     });
 
     // const vectorStore = await HNSWLib.load(dir, new OpenAIEmbeddings());
-    // const vectorStoreResult = await vectorStore.similaritySearchWithScore(question, 3);
+    const vectorStoreResult = await vectorStore.similaritySearch(question, 3);
 
     // console.log("vectorStoreResult", vectorStoreResult);
 
     await chain.call({
       input: sanitizedQuestion,
-      context: [],
+      context: vectorStoreResult,
       history: JSON.stringify(maintainedChatHistory),
       immediate_history: windowMemory,
     });
 
+    // await res.write(`data: ${JSON.stringify({ data: productRecommendations })}\n\n`);
     await res.write(`data: ${JSON.stringify({ data: "[DONE]" })}\n\n`);
+
     res.end();
   } catch (err) {
     console.error(err);

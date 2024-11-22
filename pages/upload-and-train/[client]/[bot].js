@@ -13,7 +13,12 @@ import SettingsForm from '../../../components/SettingsForm';
 import Navbar from '../../../components/layout/Navbar';
 import LoginForm from '../../login';
 
-const UploadAndTrain = ({ clientName, botName, adminUsername, adminPassword }) => {
+const UploadAndTrain = ({
+  clientName,
+  botName,
+  adminUsername,
+  adminPassword,
+}) => {
   const [loading, setLoading] = useState(false);
   const [training, setTraining] = useState(false);
   const [directoryEmpty, setDirectoryEmpty] = useState(false);
@@ -42,17 +47,14 @@ const UploadAndTrain = ({ clientName, botName, adminUsername, adminPassword }) =
       }
       return true; // Cookie not found or expired
     };
-    const adminLoggedIn = !document.cookie.includes('ck=false') && !isCookieExpired('ck');
+    const adminLoggedIn =
+      !document.cookie.includes('ck=false') && !isCookieExpired('ck');
     setIsAdminLoggedIn(adminLoggedIn);
   };
 
   const handleLogin = () => {
     setIsAdminLoggedIn(true);
   };
-
-
-
-
 
   const checkDirectory = async () => {
     try {
@@ -96,61 +98,96 @@ const UploadAndTrain = ({ clientName, botName, adminUsername, adminPassword }) =
     setSelectedSubTab(index);
   };
 
-
   return (
     <>
       {isAdminLoggedIn ? ( // If admin is logged in, show the component content
         <>
           <Navbar clientFolder={clientName} />
-          <div className="container" style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            backgroundColor: '#f1f5f9',
-            paddingTop: '50px',
-            paddingBottom: '50px'
-          }}>
+          <div
+            className='container'
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              backgroundColor: '#f1f5f9',
+              paddingTop: '50px',
+              paddingBottom: '50px',
+            }}>
             <Tabs
               className={styles.tabs}
               selectedIndex={selectedTab} // Set the selected tab index
               onSelect={handleTabSelect} // Handle tab selection
             >
               <TabList className={styles.tabList}>
-                <Tab className={styles.tab} selectedClassName={styles.selectedTab}>
+                <Tab
+                  className={styles.tab}
+                  selectedClassName={styles.selectedTab}>
                   Training Sources
                 </Tab>
-                <Tab className={styles.tab} selectedClassName={styles.selectedTab}>
+                <Tab
+                  className={styles.tab}
+                  selectedClassName={styles.selectedTab}>
                   Settings
                 </Tab>
-                <Tab className={styles.tab} selectedClassName={styles.selectedTab}>
+                <Tab
+                  className={styles.tab}
+                  selectedClassName={styles.selectedTab}>
                   Preview
                 </Tab>
-                <Tab className={styles.tab} selectedClassName={styles.selectedTab}>
+                <Tab
+                  className={styles.tab}
+                  selectedClassName={styles.selectedTab}>
                   Publish
                 </Tab>
               </TabList>
 
               <TabPanel
-                className={`${styles.tabPanel} ${selectedTab === 0 ? styles.active : ''}`}
-              >
+                className={`${styles.tabPanel} ${
+                  selectedTab === 0 ? styles.active : ''
+                }`}>
                 <Tabs
                   className={styles.tabs}
                   selectedIndex={selectedSubTab} // Set the selected tab index
                   onSelect={handleSubtabClick} // Handle tab selection
                 >
                   <TabList className={styles.subtabList}>
-                    <Tab className={styles.tab} selectedClassName={styles.selectedSubTab} onClick={(e) => { handleSubtabClick(e, 0); }} >Documents</Tab>
-                    <Tab className={styles.tab} selectedClassName={styles.selectedSubTab} onClick={(e) => { handleSubtabClick(e, 1); }} >Web URLS</Tab>
-                    <Tab className={styles.tab} selectedClassName={styles.selectedSubTab} onClick={(e) => { handleSubtabClick(e, 2); }} >QA</Tab>
+                    <Tab
+                      className={styles.tab}
+                      selectedClassName={styles.selectedSubTab}
+                      onClick={(e) => {
+                        handleSubtabClick(e, 0);
+                      }}>
+                      Documents
+                    </Tab>
+                    <Tab
+                      className={styles.tab}
+                      selectedClassName={styles.selectedSubTab}
+                      onClick={(e) => {
+                        handleSubtabClick(e, 1);
+                      }}>
+                      Web URLS
+                    </Tab>
+                    <Tab
+                      className={styles.tab}
+                      selectedClassName={styles.selectedSubTab}
+                      onClick={(e) => {
+                        handleSubtabClick(e, 2);
+                      }}>
+                      QA
+                    </Tab>
                   </TabList>
 
-                  <TabPanel className={`${styles.subtabPanel} ${selectedSubTab === 0 ? styles.active : ''}`}>
+                  <TabPanel
+                    className={`${styles.subtabPanel} ${
+                      selectedSubTab === 0 ? styles.active : ''
+                    }`}>
                     <div className={styles.fileUploadForm}>
                       <div className={styles.fileManager}>
                         <h1 className={styles.title}>
-                          Upload your documents to train the AI for {botName}, You Can Upload  PDF, WORD, CSV and TXT Files
+                          Upload your documents to train the AI for {botName},
+                          You Can Upload PDF, WORD, CSV and TXT Files
                         </h1>
                       </div>
                       <FileUploadForm
@@ -161,76 +198,100 @@ const UploadAndTrain = ({ clientName, botName, adminUsername, adminPassword }) =
                       />
                     </div>
                   </TabPanel>
-                  <TabPanel className={`${styles.subtabPanel} ${selectedSubTab === 1 ? styles.active : ''}`}>
+                  <TabPanel
+                    className={`${styles.subtabPanel} ${
+                      selectedSubTab === 1 ? styles.active : ''
+                    }`}>
                     <div className={styles.fileUploadForm}>
                       <div className={styles.fileManager}>
                         <h1 className={styles.title}>
-                          Your AI Bot can learn from your Website, You add multiple URLs pages and subpages and JSON API.
+                          Your AI Bot can learn from your Website, You add
+                          multiple URLs pages and subpages and JSON API.
                         </h1>
                       </div>
-                      <WebParserForm botName={botName} clientName={clientName} />
+                      <WebParserForm
+                        botName={botName}
+                        clientName={clientName}
+                      />
                     </div>
                   </TabPanel>
-                  <TabPanel className={`${styles.subtabPanel} ${selectedSubTab === 2 ? styles.active : ''}`}>
+                  <TabPanel
+                    className={`${styles.subtabPanel} ${
+                      selectedSubTab === 2 ? styles.active : ''
+                    }`}>
                     <div className={styles.fileUploadForm}>
                       <div className={styles.fileManager}>
                         <h1 className={styles.title}>
-                          Your AI Bot can learn from list of Questions and Answers
+                          Your AI Bot can learn from list of Questions and
+                          Answers
                         </h1>
                       </div>
-                      <QuestionAnswersForm clientName={clientName} botName={botName} />
+                      <QuestionAnswersForm
+                        clientName={clientName}
+                        botName={botName}
+                      />
                     </div>
                   </TabPanel>
                 </Tabs>
 
-
                 <button
                   onClick={handleTrainClick}
                   disabled={loading}
-                  className={`${styles.trainButton} ${loading ? styles.disabled : ''}`}
-                >
-                  {training ? 'Learning... It might take a few minutes' : 'Train it now !'}
+                  className={`${styles.trainButton} ${
+                    loading ? styles.disabled : ''
+                  }`}>
+                  {training
+                    ? 'Learning... It might take a few minutes'
+                    : 'Train it now !'}
                 </button>
               </TabPanel>
 
               <TabPanel
-                className={`${styles.tabPanel} ${selectedTab === 1 ? styles.active : ''}`}
-              >
+                className={`${styles.tabPanel} ${
+                  selectedTab === 1 ? styles.active : ''
+                }`}>
                 <h2>Settings</h2>
                 <br />
                 <SettingsForm clientFolder={clientName} botName={botName} />
-
               </TabPanel>
 
               <TabPanel
-                className={`${styles.tabPanel} ${selectedTab === 2 ? styles.active : ''}`}
-              >
+                className={`${styles.tabPanel} ${
+                  selectedTab === 2 ? styles.active : ''
+                }`}>
+                {' '}
                 <h2>Preview</h2>
                 <br />
-                <ChatScreen preview={true} clientName={clientName} botName={botName} />
+                <ChatScreen
+                  preview={true}
+                  clientName={clientName}
+                  botName={botName}
+                />
               </TabPanel>
 
               <TabPanel
-                className={`${styles.tabPanel} ${selectedTab === 3 ? styles.active : ''}`}
-              >
+                className={`${styles.tabPanel} ${
+                  selectedTab === 3 ? styles.active : ''
+                }`}>
                 <h2>Publish</h2>
                 <p>This is the content for the Publish tab.</p>
               </TabPanel>
-
-            </Tabs >
+            </Tabs>
             <div className={styles.loadingBar}>
-              <LoadingBar color="#f11946" ref={ref} />
+              <LoadingBar color='#f11946' ref={ref} />
             </div>
             <ToastContainer />
-          </div >
+          </div>
         </>
       ) : (
-        <LoginForm adminUsername={adminUsername} adminPassword={adminPassword} onLogin={handleLogin} /> // If admin is not logged in, show the login form
+        <LoginForm
+          adminUsername={adminUsername}
+          adminPassword={adminPassword}
+          onLogin={handleLogin}
+        /> // If admin is not logged in, show the login form
       )}
     </>
   );
-
-
 };
 
 export async function getServerSideProps(context) {

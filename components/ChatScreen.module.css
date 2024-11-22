@@ -52,7 +52,7 @@
     background: #F1F1F1;
     color: #000000;
     outline: none;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2); */
     /* Adds a soft shadow */
     margin: 10px 0;
 }
@@ -118,14 +118,12 @@
 .messagelist p {
     font-family: Almarai;
     font-weight: 300;
-    line-height: 35px;
 }
 
 .messagelist p a {
     font-family: Almarai;
     font-weight: 300;
-    line-height: 35px;
-    color: #a54ee1;
+    color: #2b8f63;
     font-size: 18px;
 }
 
@@ -185,9 +183,9 @@
 }
 
 .boticon, .usericon {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     border-radius: 0.1rem;
-    border-radius: 100px;
+    margin-top: 0px;
 }
 
 .markdownanswer h1, .markdownanswer h2, .markdownanswer h3 {
@@ -269,13 +267,13 @@
 .usermessage, .apimessage, .usermessagewaiting {
     position: relative;
     font-size: 16px;
-    padding: 10px 20px 10px 10px;
+    padding: 10px 20px 0px 10px;
     width: fit-content;
     max-width: 80%;
     border-radius: 20px;
     margin-bottom: 15px;
     color: white;
-    box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.15)
+    /* box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.15) */
 }
 
 /* User Message */

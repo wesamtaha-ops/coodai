@@ -3,12 +3,14 @@
 .form {
     display: flex;
     flex-direction: column;
-    max-width: 300px;
+    max-width: 400px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
+    align-content: center;
+    flex: 1;
   }
   
   .formGroup {
@@ -23,15 +25,20 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-top: 10px;
+    align-self: center;
+    width: 360px;
   }
   
   .button {
-    background-color: #007bff;
+    background-color: #235b42;
     color: #fff;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    align-self: center;
+    width: 360px;
   }
   
   .button:hover {

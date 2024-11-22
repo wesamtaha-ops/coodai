@@ -74,19 +74,20 @@
 }
 
 .selectedTab {
-  background-color: #000;
+  background-color: #235B42;
+  outline-color: #235B42;
   color: #fff;
   border-radius: 10px;
 }
 
 .selectedSubTab {
-  border-bottom: 3px solid #1877f2;
-  color: #1877f2;
+  border-bottom: 3px solid #235B42;
+  color: #235B42;
 }
 
 .tabPanel {
   padding: 0px;
-  padding-top: 10px;
+  padding-top: 25px;
   min-height: 600px;
   display: none;
 }
